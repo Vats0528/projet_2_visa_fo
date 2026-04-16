@@ -27,7 +27,7 @@ public class VisaController {
             // Convertir les données en JSON
             String jsonBody = gson.toJson(visaData);
 
-            // Envoyer à l'API de l'ami
+            // Envoyer à l'API 
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest apiRequest = HttpRequest.newBuilder()
                     .uri(URI.create(API_URL))

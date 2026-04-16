@@ -1,4 +1,222 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demandes de Visa - Madagascar</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 50px 30px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .flag {
+            font-size: 60px;
+            margin: 20px 0;
+        }
+
+        .content {
+            padding: 40px 30px;
+        }
+
+        .content h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .content p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background-color: #f0f4f8;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background-color: #e0e7f1;
+        }
+
+        .features {
+            text-align: left;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .features h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .features ul {
+            list-style: none;
+        }
+
+        .features li {
+            padding: 8px 0;
+            color: #666;
+            border-bottom: 1px solid #eee;
+        }
+
+        .features li:last-child {
+            border-bottom: none;
+        }
+
+        .features li:before {
+            content: "✓ ";
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .footer {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-top: 1px solid #eee;
+            color: #999;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                max-width: 100%;
+            }
+
+            .header {
+                padding: 30px 20px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .content {
+                padding: 30px 20px;
+            }
+
+            .button-group {
+                gap: 10px;
+            }
+
+            .btn {
+                padding: 12px 20px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="flag">Madagascar</div>
+            <h1>Portail de Demande de Visa</h1>
+            <p>République de Madagascar</p>
+            <p style="font-size: 14px; margin-top: 20px;">Demande de Visa Transformable en Long Séjour</p>
+        </div>
+
+        <div class="content">
+            <h2>Bienvenue</h2>
+            <p>Accédez au formulaire de demande de visa transformable en long séjour pour la République de Madagascar.</p>
+
+            <div class="features">
+                <h3>Avantages du portail</h3>
+                <ul>
+                    <li>Soumission simplifiée et sécurisée</li>
+                    <li>Vérification des documents en ligne</li>
+                    <li>Suivi de votre demande en temps réel</li>
+                    <li>Confirmation instantanée par email</li>
+                </ul>
+            </div>
+
+            <div class="button-group">
+                <a href="demande-visa-long-sejour.html" class="btn btn-primary">Nouvelle Demande</a>
+                <a href="#" class="btn btn-secondary">Consulter ma demande</a>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2024 Ministère de l'Intérieur et de la Décentralisation</p>
+            <p>Pour toute question, veuillez contacter le support</p>
+        </div>
+    </div>
+</body>
+</html>
 
 
 

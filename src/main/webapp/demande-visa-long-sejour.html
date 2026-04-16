@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Demande de Visa Transformable en Long Sejour</title>
+    <script src="config.js"></script>
     <style>
         * {
             margin: 0;
@@ -374,6 +375,17 @@
                         <input type="text" id="delivrepar" name="delivrepar" required>
                     </div>
                 </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="dateDelivrance">DATE DE DELIVRANCE :</label>
+                        <input type="date" id="dateDelivrance" name="dateDelivrance" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="dateExpiration">DATE D'EXPIRATION :</label>
+                        <input type="date" id="dateExpiration" name="dateExpiration">
+                    </div>
+                </div>
             </div>
 
             <div class="section">
@@ -567,46 +579,65 @@
             });
         });
 
+        // Configuration de l'API Back Office
+        // (les détails de configuration sont dans config.js)
+
         document.getElementById('visaForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            
+
+            // Validation de la catégorie de documents
+            const categorie = document.querySelector('input[name="categorie"]:checked')?.value;
+            if (!categorie) {
+                alert('Veuillez sélectionner une catégorie de documents');
+                return;
+            }
+
+            // Fonction utilitaire pour convertir les chaînes vides en null
+            const emptyToNull = (value) => value === '' ? null : value;
+
+            // Mapper les données du formulaire au format DemandeDTO du back office
             const visaRequest = {
-                personalInfo: {
-                    lastName: document.getElementById('nom').value,
-                    firstNames: document.getElementById('prenoms').value,
-                    maidenName: document.getElementById('nomJeuneFille').value || null,
-                    birthDate: document.getElementById('dateNaissance').value,
-                    maritalStatus: document.getElementById('situationFamille').value,
-                    nationality: document.getElementById('nationalite').value,
-                    homeAddress: document.getElementById('domicile').value,
-                    occupation: document.getElementById('profession').value,
-                    employerName: document.getElementById('employeur').value || null,
-                    employerAddress: document.getElementById('adresse').value
-                },
-                
-                passport: {
-                    passportNumber: document.getElementById('passeport').value,
-                    issuedBy: document.getElementById('delivrepar').value
-                },
-                
-                movements: {
-                    entryDate: document.getElementById('dateEntree').value,
-                    entryLocation: document.getElementById('lieuEntree').value || null,
-                    exitDate: document.getElementById('dateSortie').value || null,
-                    exitLocation: document.getElementById('lieuSortie').value || null
-                },
-                
-                purpose: document.querySelector('input[name="motif"]:checked').value,
-                
-                documents: {
-                    piecesCommunesRequises: Array.from(document.querySelectorAll('input[name="pieces_communes"]:checked'))
-                        .map(cb => cb.value),
-                    piecesComplementairesRequises: Array.from(document.querySelectorAll('input[name="pieces_complement"]:checked'))
-                        .map(cb => cb.value)
-                }
+                typeDemande: 'NOUVEAU_TITRE',
+                categorieVisa: categorie.toUpperCase(),
+
+                // Informations personnelles (structure plate)
+                lastName: emptyToNull(document.getElementById('nom').value),
+                firstNames: emptyToNull(document.getElementById('prenoms').value),
+                maidenName: emptyToNull(document.getElementById('nomJeuneFille').value),
+                birthDate: emptyToNull(document.getElementById('dateNaissance').value),
+                maritalStatus: emptyToNull(document.getElementById('situationFamille').value),
+                nationality: emptyToNull(document.getElementById('nationalite').value),
+                homeAddress: emptyToNull(document.getElementById('domicile').value),
+                occupation: emptyToNull(document.getElementById('profession').value),
+                employerName: emptyToNull(document.getElementById('employeur').value),
+                employerAddress: emptyToNull(document.getElementById('adresse').value),
+
+                // Visa transformable (précédent)
+                numeroVisaPrcd: emptyToNull(document.getElementById('passeport').value),
+                dateDelivranceVisaPrcd: emptyToNull(document.getElementById('dateDelivrance').value),
+                dateExpirationVisaPrcd: emptyToNull(document.getElementById('dateExpiration').value),
+
+                // Pièces communes
+                aFourniPhotos: document.getElementById('piece1').checked,
+                aFourniNoticeRenseignement: document.getElementById('piece2').checked,
+                aFourniDemandeMinistre: document.getElementById('piece3').checked,
+                aFourniCopieVisa: document.getElementById('piece4').checked,
+                aFourniCopiePasseport: document.getElementById('piece5').checked,
+                aFourniCopieCarteResident: document.getElementById('piece6').checked,
+                aFourniCertificatResidence: document.getElementById('piece7').checked,
+                aFourniExtraitCasierJudiciaire: document.getElementById('piece8').checked,
+
+                // Pièces complémentaires - Travailleur
+                aFourniAutorisationEmploi: document.getElementById('comp1')?.checked || false,
+                aFourniAttestationEmploi: document.getElementById('comp2')?.checked || false,
+
+                // Pièces complémentaires - Investisseur
+                aFourniStatutSociete: document.getElementById('comp3')?.checked || false,
+                aFourniExtraitRC: document.getElementById('comp4')?.checked || false,
+                aFourniCarteFiscale: document.getElementById('comp5')?.checked || false
             };
             
-            console.log('Envoi des donnees (JSON):', JSON.stringify(visaRequest, null, 2));
+            console.log('Envoi des donnees vers le back office:', JSON.stringify(visaRequest, null, 2));
             
             const button = this.querySelector('button[type="submit"]');
             const originalText = button.textContent;
@@ -614,7 +645,10 @@
             button.disabled = true;
             
             try {
-                const response = await fetch('/projet_2_visa_fo/submitVisa', {
+                const apiUrl = API_CONFIG.BASE_URL + API_CONFIG.ENDPOINT;
+                console.log('URL API:', apiUrl);
+                
+                const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -625,16 +659,16 @@
                 const result = await response.json();
                 console.log('Reponse du serveur:', result);
                 
-                if (result.error) {
-                    alert('Erreur: ' + result.error);
-                } else {
-                    alert('Demande envoyee avec succes!\n\nID Demande: ' + (result.id || 'N/A'));
+                if (response.ok) {
+                    alert('Demande envoyee avec succes!\n\nID Demande: ' + (result.id || result.numerodemande || 'N/A'));
                     this.reset();
+                } else {
+                    alert('Erreur: ' + (result.message || result.error || 'Erreur inconnue'));
                 }
                 
             } catch (error) {
-                console.error('Erreur:', error);
-                alert('Erreur lors de l\'envoi: ' + error.message);
+                console.error('Erreur lors de l\'envoi:', error);
+                alert('Erreur lors de l\'envoi à l\'API:\n' + error.message + '\n\nAssurez-vous que le back office est en cours d\'exécution sur ' + API_CONFIG.BASE_URL);
             } finally {
                 button.textContent = originalText;
                 button.disabled = false;
