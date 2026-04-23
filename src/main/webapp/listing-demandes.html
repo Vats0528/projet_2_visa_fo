@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listing des Demandes avec Constats</title>
+    <meta name="description" content="Vue complète des demandes de visa - République de Madagascar">
+    <script src="config.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f4f8;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .filter-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-group label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .filter-group input,
+        .filter-group select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .filter-group input:focus,
+        .filter-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 8px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background-color: #e0e0e0;
+            color: #333;
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background-color: #cfcfcf;
+        }
+
+        .print-btn {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        .print-btn:hover:not(:disabled) {
+            background-color: #45a049;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        /* TABLEAU */
+        .table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+            min-height: 100px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        thead {
+            background-color: #f5f5f5;
+            border-bottom: 2px solid #e0e0e0;
+            position: sticky;
+            top: 0;
+        }
+
+        th {
+            padding: 12px;
+            text-align: left;
+            font-weight: bold;
+            color: #333;
+            font-size: 14px;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 14px;
+        }
+
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .status-cree {
+            background-color: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .status-en-cours {
+            background-color: #fff3e0;
+            color: #e65100;
+        }
+
+        .status-documents-manquants {
+            background-color: #ffebee;
+            color: #b71c1c;
+        }
+
+        .status-valide {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .constat-box {
+            background-color: #ffebee;
+            border-left: 4px solid #f44336;
+            padding: 10px;
+            border-radius: 4px;
+            color: #b71c1c;
+            font-size: 13px;
+            max-width: 400px;
+        }
+
+        .constat-box.vide {
+            background-color: #e8f5e9;
+            border-left-color: #4caf50;
+            color: #2e7d32;
+        }
+
+        .expand-btn {
+            background-color: #667eea;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+
+        .expand-btn:hover {
+            background-color: #764ba2;
+        }
+
+        .btn-edit-listing {
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+            margin-left: 4px;
+        }
+
+        .btn-edit-listing:hover {
+            background-color: #1976D2;
+        }
+
+        .actions-cell {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+
+        .details {
+            display: none;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-top: 2px solid #e0e0e0;
+            font-size: 13px;
+        }
+
+        .details.show {
+            display: table-row;
+        }
+
+        .details td {
+            padding: 15px;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .detail-item {
+            border: 1px solid #e0e0e0;
+            padding: 10px;
+            border-radius: 4px;
+            background-color: white;
+        }
+
+        .detail-item label {
+            font-weight: bold;
+            color: #667eea;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .detail-item value {
+            color: #333;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .empty-state p {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #667eea;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert-error {
+            background-color: #ffebee;
+            color: #b71c1c;
+            border: 1px solid #f44336;
+        }
+
+        @media (max-width: 768px) {
+            .filter-section {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .table-container {
+                font-size: 12px;
+            }
+
+            th, td {
+                padding: 8px;
+            }
+
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+
+        @media print {
+            body {
+                background-color: white;
+            }
+            .filter-section, .stats, .expand-btn, .print-btn {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Listing des Demandes</h1>
+            <p>Vue complète avec Constats et Observations</p>
+            <p style="margin-top:8px; font-size:12px; opacity:0.8;">
+                <a href="gestion-demandes.html" style="color:white; text-decoration:underline;">&#x2699;&#xFE0F; Gestion / Nouvelle Demande</a>
+            </p>
+        </div>
+
+        <div class="content">
+            <div class="alert" id="alertMessage"></div>
+
+            <!-- FILTRES -->
+            <div class="filter-section">
+                <div class="filter-group">
+                    <label for="filterNom">Rechercher par Nom</label>
+                    <input type="text" id="filterNom" placeholder="Nom du demandeur...">
+                </div>
+                <div class="filter-group">
+                    <label for="filterStatut">Filtrer par Statut</label>
+                    <select id="filterStatut">
+                        <option value="">-- Tous les statuts --</option>
+                        <option value="CREE">Créé</option>
+                        <option value="EN_COURS">En Cours</option>
+                        <option value="DOCUMENTS_MANQUANTS">Documents Manquants</option>
+                        <option value="VALIDE">Validé</option>
+                    </select>
+                </div>
+                <div class="filter-buttons">
+                    <button class="btn btn-primary" onclick="applyFilters()">Appliquer</button>
+                    <button class="btn btn-secondary" onclick="resetFilters()">Réinitialiser</button>
+                    <button class="btn print-btn" onclick="window.print()">Imprimer</button>
+                </div>
+            </div>
+
+            <!-- STATISTIQUES -->
+            <div class="stats" id="statsContainer">
+                <div class="stat-card">
+                    <h3 id="statTotal">0</h3>
+                    <p>Demandes Total</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="statCree">0</h3>
+                    <p>Créées</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="statEnCours">0</h3>
+                    <p>En Cours</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="statManquant">0</h3>
+                    <p>Documents Manquants</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="statValide">0</h3>
+                    <p>Validées</p>
+                </div>
+            </div>
+
+            <!-- TABLEAU -->
+            <h2 class="section-title">Détail des Demandes</h2>
+
+            <div class="table-container">
+                <div id="loadingMessage" class="loading">
+                    <div class="spinner"></div>
+                    <p>Chargement des demandes...</p>
+                </div>
+                <table id="demandesTable" style="display: none;">
+                    <thead>
+                        <tr>
+                            <th style="width: 100px;">Actions</th>
+                            <th>ID</th>
+                            <th>Demandeur</th>
+                            <th>Profession</th>
+                            <th>Type</th>
+                            <th>Statut</th>
+                            <th>Constat</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="demandesBody">
+                    </tbody>
+                </table>
+                <div id="emptyMessage" class="empty-state" style="display: none;">
+                    <p>Aucune demande disponible.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let allDemandes = [];
+
+        // ═══════════════════════════════════════════════════════════════
+        // CHARGEMENT INITIAL
+        // ═══════════════════════════════════════════════════════════════
+        document.addEventListener('DOMContentLoaded', loadDemandes);
+
+        // ═══════════════════════════════════════════════════════════════
+        // CHARGEMENT DES DEMANDES (API)
+        // ═══════════════════════════════════════════════════════════════
+        async function loadDemandes() {
+            const loadingMsg = document.getElementById('loadingMessage');
+            const table = document.getElementById('demandesTable');
+            const emptyMsg = document.getElementById('emptyMessage');
+
+            loadingMsg.style.display = 'block';
+            table.style.display = 'none';
+            emptyMsg.style.display = 'none';
+
+            try {
+                const response = await fetch(API_CONFIG.BASE_URL + '/api/visa/demandes', {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Erreur lors du chargement des demandes');
+                }
+
+                allDemandes = await response.json();
+                refreshTable();
+                refreshStats();
+
+                if (allDemandes.length === 0) {
+                    emptyMsg.style.display = 'block';
+                } else {
+                    table.style.display = 'table';
+                }
+            } catch (error) {
+                showAlert('Erreur: ' + error.message, 'error');
+                emptyMsg.style.display = 'block';
+            } finally {
+                loadingMsg.style.display = 'none';
+            }
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // AFFICHAGE DU TABLEAU
+        // ═══════════════════════════════════════════════════════════════
+        function refreshTable(demandes = allDemandes) {
+            const tbody = document.getElementById('demandesBody');
+
+            if (demandes.length === 0) {
+                tbody.innerHTML = '';
+                document.getElementById('demandesTable').style.display = 'none';
+                document.getElementById('emptyMessage').style.display = 'block';
+                return;
+            }
+
+            tbody.innerHTML = demandes.map(d => `
+                <tr>
+                    <td>
+                        <div class="actions-cell">
+                            <button class="expand-btn" onclick="toggleDetails(${d.id})">Détails</button>
+                            <button class="btn-edit-listing" onclick="modifierDemande(${d.id})" title="Modifier cette demande">✏️</button>
+                        </div>
+                    </td>
+                    <td>#${d.id}</td>
+                    <td><strong>${d.demandeur?.nom || '—'} ${d.demandeur?.prenom || '—'}</strong></td>
+                    <td>${d.demandeur?.profession || '—'}</td>
+                    <td>${d.typeDemande?.nom || '—'}</td>
+                    <td><span class="status-badge status-${(d.status?.status || '').toLowerCase().replace(/_/g, '-')}">${formatStatus(d.status?.status)}</span></td>
+                    <td>
+                        <div class="constat-box ${d.status?.observation ? '' : 'vide'}">
+                            ${d.status?.observation || 'Aucun constat'}
+                        </div>
+                    </td>
+                    <td>${d.createdAt ? new Date(d.createdAt).toLocaleDateString('fr-FR') : '—'}</td>
+                </tr>
+                <tr class="details" id="details-${d.id}">
+                    <td colspan="8">
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <label>Nom Complet</label>
+                                <div>${d.demandeur?.nom || '—'} ${d.demandeur?.prenom || '—'}</div>
+                            </div>
+                            <div class="detail-item">
+                                <label>Date de Naissance</label>
+                                <div>${formatDate(d.demandeur?.dateNaissance)}</div>
+                            </div>
+                            <div class="detail-item">
+                                <label>Nationalité</label>
+                                <div>${d.demandeur?.nationalite?.nom || '—'}</div>
+                            </div>
+                            <div class="detail-item">
+                                <label>Situation Familiale</label>
+                                <div>${d.demandeur?.situationFamille?.libelle || '—'}</div>
+                            </div>
+                            <div class="detail-item">
+                                <label>Profession</label>
+                                <div>${d.demandeur?.profession || '—'}</div>
+                            </div>
+                            <div class="detail-item">
+                                <label>Type de Demande</label>
+                                <div>${d.typeDemande?.nom || '—'}</div>
+                            </div>
+                            <div class="detail-item">
+                                <label>Statut</label>
+                                <div><span class="status-badge status-${(d.status?.status || '').toLowerCase().replace(/_/g, '-')}">${formatStatus(d.status?.status)}</span></div>
+                            </div>
+                            <div class="detail-item">
+                                <label>Date Création</label>
+                                <div>${d.createdAt ? new Date(d.createdAt).toLocaleDateString('fr-FR') : '—'}</div>
+                            </div>
+                            ${d.status?.observation ? `
+                            <div class="detail-item">
+                                <label>Constat / Observation</label>
+                                <div class="constat-box">${d.status.observation}</div>
+                            </div>
+                            ` : ''}
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+
+            document.getElementById('demandesTable').style.display = 'table';
+            document.getElementById('emptyMessage').style.display = 'none';
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // RAFRAÎCHIR STATISTIQUES
+        // ═══════════════════════════════════════════════════════════════
+        function refreshStats(demandes = allDemandes) {
+            const total = demandes.length;
+            const cree = demandes.filter(d => d.status?.status === 'CREE').length;
+            const enCours = demandes.filter(d => d.status?.status === 'EN_COURS').length;
+            const manquant = demandes.filter(d => d.status?.status === 'DOCUMENTS_MANQUANTS').length;
+            const valide = demandes.filter(d => d.status?.status === 'VALIDE').length;
+
+            document.getElementById('statTotal').textContent = total;
+            document.getElementById('statCree').textContent = cree;
+            document.getElementById('statEnCours').textContent = enCours;
+            document.getElementById('statManquant').textContent = manquant;
+            document.getElementById('statValide').textContent = valide;
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // FORMATAGE DU STATUT
+        // ═══════════════════════════════════════════════════════════════
+        function formatStatus(status) {
+            const map = {
+                'CREE': 'Créé',
+                'EN_COURS': 'En Cours',
+                'DOCUMENTS_MANQUANTS': 'Documents Manquants',
+                'VALIDE': 'Validé'
+            };
+            return map[status] || status || '—';
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // TOGGLE DÉTAILS
+        // ═══════════════════════════════════════════════════════════════
+        function toggleDetails(id) {
+            const detailsRow = document.getElementById(`details-${id}`);
+            detailsRow.classList.toggle('show');
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // MODIFIER DEPUIS LISTING (redirection)
+        // ═══════════════════════════════════════════════════════════════
+        function modifierDemande(id) {
+            window.location.href = `gestion-demandes.html?edit=${id}`;
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // FORMATAGE DES DATES (LocalDate array [y,m,d] ou string ISO)
+        // ═══════════════════════════════════════════════════════════════
+        function formatDate(val) {
+            if (!val) return '—';
+            if (Array.isArray(val)) {
+                return `${String(val[2]).padStart(2,'0')}/${String(val[1]).padStart(2,'0')}/${val[0]}`;
+            }
+            return new Date(val).toLocaleDateString('fr-FR');
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // FILTRAGE
+        // ═══════════════════════════════════════════════════════════════
+        function applyFilters() {
+            const nom = document.getElementById('filterNom').value.toLowerCase();
+            const statut = document.getElementById('filterStatut').value;
+
+            let filtered = allDemandes;
+
+            if (nom) {
+                filtered = filtered.filter(d =>
+                    (d.demandeur?.nom || '').toLowerCase().includes(nom) ||
+                    (d.demandeur?.prenom || '').toLowerCase().includes(nom)
+                );
+            }
+
+            if (statut) {
+                filtered = filtered.filter(d => d.status?.status === statut);
+            }
+
+            refreshTable(filtered);
+            refreshStats(filtered);
+        }
+
+        function resetFilters() {
+            document.getElementById('filterNom').value = '';
+            document.getElementById('filterStatut').value = '';
+            refreshTable(allDemandes);
+            refreshStats(allDemandes);
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // ALERTES
+        // ═══════════════════════════════════════════════════════════════
+        function showAlert(message, type = 'error') {
+            const alertEl = document.getElementById('alertMessage');
+            alertEl.textContent = message;
+            alertEl.className = `alert show alert-${type}`;
+            setTimeout(() => {
+                alertEl.classList.remove('show');
+            }, 4000);
+        }
+    </script>
+</body>
+</html>
