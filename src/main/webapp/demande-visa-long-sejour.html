@@ -1,708 +1,530 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Demande de Visa Transformable en Long Sejour</title>
-    <meta name="description"
-        content="Formulaire de demande de visa transformable en long séjour - République de Madagascar">
-    <script src="config.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f0f4f8;
-            padding: 20px;
-            color: #333;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-
-        .header h1 {
-            font-size: 24px;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-        }
-
-        .header p {
-            font-size: 14px;
-            opacity: 0.9;
-        }
-
-        .section {
-            padding: 30px;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        .section:last-of-type {
-            border-bottom: none;
-        }
-
-        .section-title {
-            font-size: 16px;
-            font-weight: bold;
-            color: #667eea;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .form-row.full {
-            grid-template-columns: 1fr;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .form-group label {
-            font-weight: 600;
-            margin-bottom: 8px;
-            font-size: 14px;
-            color: #333;
-        }
-
-        .form-group input[type="text"],
-        .form-group input[type="date"],
-        .form-group select {
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-            font-family: inherit;
-            transition: border-color 0.3s;
-        }
-
-        .form-group input[type="text"]:focus,
-        .form-group input[type="date"]:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
-        }
-
-        .motif-container {
-            display: flex;
-            gap: 30px;
-            margin-top: 10px;
-            padding: 20px;
-            background-color: #f9f9f9;
-            border-radius: 4px;
-        }
-
-        .radio-group {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .radio-group input[type="radio"] {
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-        }
-
-        .radio-group label {
-            margin: 0;
-            font-weight: 500;
-            cursor: pointer;
-        }
-
-        .checklist-section {
-            margin-top: 20px;
-        }
-
-        .subsection {
-            margin-bottom: 25px;
-        }
-
-        .subsection-title {
-            font-size: 14px;
-            font-weight: bold;
-            color: #764ba2;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
-
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 8px 0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .checkbox-group:last-child {
-            border-bottom: none;
-        }
-
-        .checkbox-group input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-            accent-color: #667eea;
-        }
-
-        .checkbox-group label {
-            margin: 0;
-            cursor: pointer;
-            font-size: 14px;
-            flex: 1;
-        }
-
-        .category-selector {
-            background-color: #f0f4f8;
-            padding: 20px;
-            border-radius: 4px;
-            margin-bottom: 25px;
-        }
-
-        .category-selector h3 {
-            font-size: 14px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: #333;
-        }
-
-        .category-options {
-            display: flex;
-            gap: 20px;
-        }
-
-        .category-option {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .category-option input[type="radio"] {
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-            accent-color: #667eea;
-        }
-
-        .category-option label {
-            margin: 0;
-            cursor: pointer;
-            font-weight: 500;
-        }
-
-        .hidden-content {
-            display: none;
-        }
-
-        .hidden-content.active {
-            display: block;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 15px;
-            margin-top: 30px;
-            justify-content: center;
-        }
-
-        .btn {
-            padding: 12px 30px;
-            font-size: 14px;
-            font-weight: bold;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-secondary {
-            background-color: #e0e0e0;
-            color: #333;
-        }
-
-        .btn-secondary:hover {
-            background-color: #cfcfcf;
-        }
-
-        @media (max-width: 768px) {
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-
-            .motif-container {
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            .category-options {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .button-group {
-                flex-direction: column;
-            }
-
-            .header h1 {
-                font-size: 20px;
-            }
-        }
-    </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Nouvelle demande — Visa Transformable</title>
+<link rel="stylesheet" href="style.css"/>
 </head>
-
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Demande de Visa Transformable en Long Sejour</h1>
-            <p>Republique de Madagascar</p>
-            <p style="margin-top:8px; font-size:12px; opacity:0.8;">
-                <a href="index.html" style="color:white; text-decoration:underline;">&#x2190; Retour Accueil</a>
-                &nbsp;|&nbsp;
-                <a href="listing-demandes.html" style="color:white; text-decoration:underline;">📋 Consulter les
-                    Demandes</a>
-            </p>
-        </div>
 
-        <form id="visaForm">
-            <div class="section">
-                <div class="section-title">1. Informations Personnelles</div>
+<nav class="nav">
+  <a class="nav-brand" href="index.html">Visa <span>Transformable</span></a>
+  <div class="nav-links">
+    <a class="nav-link" href="index.html">Tableau de bord</a>
+    <a class="nav-link active" href="demande-visa-long-sejour.html">Nouvelle demande</a>
+    <a class="nav-link" href="listing-demandes.html">Mes demandes</a>
+  </div>
+</nav>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="nom">NOM :</label>
-                        <input type="text" id="nom" name="nom" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="prenoms">PRENOMS :</label>
-                        <input type="text" id="prenoms" name="prenoms" required>
-                    </div>
-                </div>
+<main class="page">
+  <div class="page-header">
+    <h1 class="page-title">Nouvelle <em>demande</em></h1>
+    <p class="page-sub">Transformation de visa — remplissez les informations au fur et à mesure</p>
+  </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="nomJeuneFille">NOM DE JEUNE FILLE :</label>
-                        <input type="text" id="nomJeuneFille" name="nomJeuneFille">
-                    </div>
-                    <div class="form-group">
-                        <label for="dateNaissance">NE(E) LE :</label>
-                        <input type="date" id="dateNaissance" name="dateNaissance" required>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="situationFamille">SITUATION DE FAMILLE :</label>
-                        <select id="situationFamille" name="situationFamille" required>
-                            <option value="">-- Selectionner --</option>
-                            <option value="celibataire">Celibataire</option>
-                            <option value="marie">Marie(e)</option>
-                            <option value="divorce">Divorce(e)</option>
-                            <option value="veuf">Veuf/Veuve</option>
-                            <option value="pacs">Pacs(e)</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="nationalite">NATIONALITE :</label>
-                        <input type="text" id="nationalite" name="nationalite" required>
-                    </div>
-                </div>
-
-                <div class="form-row full">
-                    <div class="form-group">
-                        <label for="domicile">DOMICILE HABITUEL :</label>
-                        <input type="text" id="domicile" name="domicile" required>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="profession">PROFESSION OU QUALITE :</label>
-                        <input type="text" id="profession" name="profession" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="employeur">EMPLOYEUR :</label>
-                        <input type="text" id="employeur" name="employeur">
-                    </div>
-                </div>
-
-                <div class="form-row full">
-                    <div class="form-group">
-                        <label for="adresse">ADRESSE :</label>
-                        <input type="text" id="adresse" name="adresse" required>
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">2. Donnees du Passeport</div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="passeport">PASSEPORT N :</label>
-                        <input type="text" id="passeport" name="passeport" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="delivrepar">DELIVRE PAR :</label>
-                        <input type="text" id="delivrepar" name="delivrepar" required>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="dateDelivrance">DATE DE DELIVRANCE :</label>
-                        <input type="date" id="dateDelivrance" name="dateDelivrance" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="dateExpiration">DATE D'EXPIRATION :</label>
-                        <input type="date" id="dateExpiration" name="dateExpiration">
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">3. Mouvements a Madagascar</div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="dateEntree">DATE D'ENTREE A MADAGASCAR :</label>
-                        <input type="date" id="dateEntree" name="dateEntree" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="lieuEntree">LIEU D'ENTREE :</label>
-                        <input type="text" id="lieuEntree" name="lieuEntree">
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="dateSortie">DATE DE SORTIE :</label>
-                        <input type="date" id="dateSortie" name="dateSortie">
-                    </div>
-                    <div class="form-group">
-                        <label for="lieuSortie">LIEU DE SORTIE :</label>
-                        <input type="text" id="lieuSortie" name="lieuSortie">
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">4. Motif du Voyage</div>
-
-                <div class="motif-container">
-                    <div class="radio-group">
-                        <input type="radio" id="travailleur" name="motif" value="travailleur" required>
-                        <label for="travailleur">TRAVAILLEUR</label>
-                    </div>
-                    <div class="radio-group">
-                        <input type="radio" id="investisseur" name="motif" value="investisseur">
-                        <label for="investisseur">INVESTISSEUR</label>
-                    </div>
-                    <div class="radio-group">
-                        <input type="radio" id="regroupement" name="motif" value="regroupement">
-                        <label for="regroupement">REGROUPEMENT FAMILIAL</label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">5. Documents a Fournir</div>
-
-                <div class="category-selector">
-                    <h3>Selectionnez votre categorie :</h3>
-                    <div class="category-options">
-                        <div class="category-option">
-                            <input type="radio" id="catTravailleur" name="categorie" value="travailleur"
-                                onchange="updateDocuments()">
-                            <label for="catTravailleur">Travailleur</label>
-                        </div>
-                        <div class="category-option">
-                            <input type="radio" id="catInvestisseur" name="categorie" value="investisseur"
-                                onchange="updateDocuments()">
-                            <label for="catInvestisseur">Investisseur</label>
-                        </div>
-                        <div class="category-option">
-                            <input type="radio" id="catRegroupement" name="categorie" value="regroupement"
-                                onchange="updateDocuments()">
-                            <label for="catRegroupement">Regroupement Familial</label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="checklist-section">
-                    <div class="subsection">
-                        <div class="subsection-title">Pieces Communes</div>
-
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="piece1" name="pieces_communes" value="photos">
-                            <label for="piece1">02 photos d'identite</label>
-                        </div>
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="piece2" name="pieces_communes" value="notice">
-                            <label for="piece2">Notice de renseignement</label>
-                        </div>
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="piece3" name="pieces_communes" value="demande">
-                            <label for="piece3">Demande adressee a Mr le Ministere de l'Interieur et de la
-                                Decentralisation avec adresse e-mail et numero telephone portable</label>
-                        </div>
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="piece4" name="pieces_communes" value="visa">
-                            <label for="piece4">Photocopie certifiee du visa en cours de validite</label>
-                        </div>
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="piece5" name="pieces_communes" value="passeport">
-                            <label for="piece5">Photocopie certifiee de la premiere page du passeport</label>
-                        </div>
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="piece6" name="pieces_communes" value="carteResident">
-                            <label for="piece6">Photocopie certifiee de la carte resident en cours de validite</label>
-                        </div>
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="piece7" name="pieces_communes" value="residence">
-                            <label for="piece7">Certificat de residence a Madagascar</label>
-                        </div>
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="piece8" name="pieces_communes" value="casier">
-                            <label for="piece8">Extrait de casier judiciaire moins de 3 mois</label>
-                        </div>
-                    </div>
-
-                    <div class="subsection" id="completaires">
-                        <div class="subsection-title">Pieces Complementaires</div>
-
-                        <div id="pieces-travailleur" class="hidden-content">
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="comp1" name="pieces_complement" value="autorisation">
-                                <label for="comp1">Autorisation emploi delivree a Madagascar par le Ministere de la
-                                    Fonction publique</label>
-                            </div>
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="comp2" name="pieces_complement" value="attestation">
-                                <label for="comp2">Attestation d'emploi delivre par l'employeur (Original)</label>
-                            </div>
-                        </div>
-
-                        <div id="pieces-investisseur" class="hidden-content">
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="comp3" name="pieces_complement" value="statut">
-                                <label for="comp3">Statut de la Societe</label>
-                            </div>
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="comp4" name="pieces_complement" value="registre">
-                                <label for="comp4">Extrait d'inscription au registre de commerce</label>
-                            </div>
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="comp5" name="pieces_complement" value="fiscale">
-                                <label for="comp5">Carte fiscale</label>
-                            </div>
-                        </div>
-
-                        <div id="pieces-regroupement" class="hidden-content">
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="comp6" name="pieces_complement" value="naissance">
-                                <label for="comp6">Acte de naissance livre moins de 6 mois (enfant) ou acte de mariage
-                                    (livret de famille)</label>
-                            </div>
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="comp7" name="pieces_complement" value="ressources">
-                                <label for="comp7">Justificatif de ressources pour les Hommes en regroupement
-                                    familial</label>
-                            </div>
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="comp8" name="pieces_complement" value="autorisationRF">
-                                <label for="comp8">Autorisation emploi pour le Regroupement familial des
-                                    travailleurs</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="button-group">
-                    <button type="submit" class="btn btn-primary">Soumettre la Demande</button>
-                    <button type="reset" class="btn btn-secondary">Reinitialiser</button>
-                </div>
-            </div>
-        </form>
+  <!-- Steps -->
+  <div class="steps" id="steps-nav">
+    <div class="step-item active" id="si1">
+      <div class="step-dot">1</div>
+      <div class="step-label">Type de visa</div>
     </div>
+    <div class="step-line"></div>
+    <div class="step-item" id="si2">
+      <div class="step-dot">2</div>
+      <div class="step-label">Demandeur</div>
+    </div>
+    <div class="step-line"></div>
+    <div class="step-item" id="si3">
+      <div class="step-dot">3</div>
+      <div class="step-label">Visa précédent</div>
+    </div>
+    <div class="step-line"></div>
+    <div class="step-item" id="si4">
+      <div class="step-dot">4</div>
+      <div class="step-label">Pièces du dossier</div>
+    </div>
+  </div>
 
-    <script>
-        function updateDocuments() {
-            const categorie = document.querySelector('input[name="categorie"]:checked')?.value;
+  <!-- Step 1 : Type -->
+  <div id="step1">
+    <div class="card">
+      <div class="card-header"><span class="card-title">Type de visa souhaité</span></div>
+      <div class="form-grid" id="types-grid">
+        <!-- rendered by JS -->
+      </div>
+      <div id="type-error" class="text-sm" style="color:var(--c-danger);display:none;margin-top:8px">
+        Veuillez sélectionner un type de visa.
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="nextStep(1)">Continuer →</button>
+    </div>
+  </div>
 
-            document.getElementById('pieces-travailleur').classList.remove('active');
-            document.getElementById('pieces-investisseur').classList.remove('active');
-            document.getElementById('pieces-regroupement').classList.remove('active');
+  <!-- Step 2 : Demandeur -->
+  <div id="step2" style="display:none">
+    <div class="card">
+      <div class="card-header"><span class="card-title">Identité du demandeur</span></div>
+      <div class="form-grid">
+        <div class="field">
+          <label>Nom de famille *</label>
+          <input type="text" id="lastName" placeholder="Rakotozafy"/>
+        </div>
+        <div class="field">
+          <label>Prénom(s) *</label>
+          <input type="text" id="firstNames" placeholder="Jean Michel"/>
+        </div>
+        <div class="field">
+          <label>Nom de jeune fille</label>
+          <input type="text" id="maidenName" placeholder="(si applicable)"/>
+        </div>
+        <div class="field">
+          <label>Date de naissance</label>
+          <input type="date" id="birthDate"/>
+        </div>
+        <div class="field">
+          <label>Situation familiale *</label>
+          <select id="maritalStatus">
+            <option value="">— Sélectionner —</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Nationalité *</label>
+          <select id="nationality">
+            <option value="">— Sélectionner —</option>
+          </select>
+        </div>
+        <div class="field form-full">
+          <label>Adresse de domicile</label>
+          <input type="text" id="homeAddress" placeholder="123 rue de la Paix, Antananarivo"/>
+        </div>
+        <div class="field">
+          <label>Profession / Occupation</label>
+          <input type="text" id="occupation" placeholder="Ingénieur, Directeur…"/>
+        </div>
+        <div class="field">
+          <label>Nom de l'employeur / Société</label>
+          <input type="text" id="employerName" placeholder="Nom de l'entreprise"/>
+        </div>
+        <div class="field form-full">
+          <label>Adresse de l'employeur</label>
+          <input type="text" id="employerAddress" placeholder="Adresse complète de l'employeur"/>
+        </div>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="prevStep(2)">← Retour</button>
+      <button class="btn btn-primary" onclick="nextStep(2)">Continuer →</button>
+    </div>
+  </div>
 
-            if (categorie === 'travailleur') {
-                document.getElementById('pieces-travailleur').classList.add('active');
-            } else if (categorie === 'investisseur') {
-                document.getElementById('pieces-investisseur').classList.add('active');
-            } else if (categorie === 'regroupement') {
-                document.getElementById('pieces-regroupement').classList.add('active');
-            }
+  <!-- Step 3 : Visa précédent -->
+  <div id="step3" style="display:none">
+    <div class="card">
+      <div class="card-header"><span class="card-title">Visa transformable précédent</span></div>
+      <p class="text-sm text-muted" style="margin-bottom:1.25rem">
+        Renseignez les informations du visa qui sera transformé. Ces champs peuvent être complétés plus tard.
+      </p>
+      <div class="form-grid cols-3">
+        <div class="field">
+          <label>Numéro du visa précédent</label>
+          <input type="text" id="numeroVisaPrcd" placeholder="VT-2024-XXXXX"/>
+        </div>
+        <div class="field">
+          <label>Date de délivrance</label>
+          <input type="date" id="dateDelivranceVisaPrcd"/>
+        </div>
+        <div class="field">
+          <label>Date d'expiration</label>
+          <input type="date" id="dateExpirationVisaPrcd"/>
+        </div>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="prevStep(3)">← Retour</button>
+      <button class="btn btn-primary" onclick="nextStep(3)">Continuer →</button>
+    </div>
+  </div>
+
+  <!-- Step 4 : Pièces -->
+  <div id="step4" style="display:none">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Pièces du dossier</span>
+        <span class="badge badge-neutral" id="pieces-count">0 / 0</span>
+      </div>
+      <p class="text-sm text-muted" style="margin-bottom:1.25rem">
+        Cochez les pièces déjà en votre possession. Vous pourrez mettre à jour le dossier à tout moment.
+      </p>
+      <div class="progress-wrap">
+        <div class="progress-bar"><div class="progress-fill" id="pf" style="width:0%"></div></div>
+        <div class="progress-meta"><span id="pl">0 pièce fournie</span><span id="pp">0%</span></div>
+      </div>
+      <div class="divider"></div>
+      <div class="pieces-grid" id="pieces-grid">
+        <!-- rendered by JS -->
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="prevStep(4)">← Retour</button>
+      <button class="btn btn-primary" id="btn-submit" onclick="submitDemande()">
+        <span id="submit-text">Soumettre la demande</span>
+      </button>
+    </div>
+  </div>
+</main>
+
+<script src="config.js"></script>
+<script>
+const COMMON_LIBELLES = [
+  'Photos',
+  'Notice de renseignement',
+  'Demande Ministre',
+  'Copie Visa',
+  'Copie Passeport',
+  'Certificat de Résidence',
+  'Casier Judiciaire'
+];
+
+const SPECIAL_BY_TYPE = {
+  'TRAVAIL': ['Autorisation Emploi', 'Attestation Emploi'],
+  'ENTREPRENEUR': ['Statut Société', 'Extrait RC', 'Carte Fiscale']
+};
+
+let allTypeVisas = [];
+let allTypeDemandes = [];
+let allNationalites = [];
+let allSituations = [];
+let allCategories = [];
+let selectedType = null;
+let pieceState = {};
+let commonPieces = [];
+let specialPieces = {};
+let currentStep = 1;
+
+// Initialisation au chargement
+async function initializeForm() {
+  allTypeVisas = await loadTypeVisas();
+  allTypeDemandes = await loadTypeDemandes();
+  allNationalites = await loadNationalites();
+  allSituations = await loadSituationsFamiliales();
+  allCategories = await loadCategoriesPieces();
+  buildPieceMaps();
+  renderTypeOptions();
+  renderNationalites();
+  renderSituations();
+  initializePieceState();
+}
+
+function initializePieceState() {
+  pieceState = {};
+  commonPieces.forEach(p => { pieceState[p.id] = false; });
+  Object.values(specialPieces).forEach(pieces => {
+    pieces.forEach(p => { pieceState[p.id] = false; });
+  });
+}
+
+function normalizeKey(value) {
+  return (value || '').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+
+function buildPieceMaps() {
+  commonPieces = [];
+  specialPieces = {};
+
+  const commonKeys = COMMON_LIBELLES.map(normalizeKey);
+  const specialKeys = {};
+  Object.keys(SPECIAL_BY_TYPE).forEach(type => {
+    specialKeys[type] = SPECIAL_BY_TYPE[type].map(normalizeKey);
+  });
+
+  const specialHints = {
+    'TRAVAIL': ['emploi', 'attestation'],
+    'ENTREPRENEUR': ['statut', 'rc', 'fiscale', 'societe']
+  };
+
+  const hasAny = (value, hints) => {
+    return hints.some(h => value.includes(h));
+  };
+
+  (allCategories || []).forEach(cat => {
+    const label = cat.libelle || '';
+    const key = normalizeKey(label);
+
+    if (commonKeys.includes(key)) {
+      commonPieces.push(cat);
+      return;
+    }
+
+    let matched = false;
+    Object.keys(specialKeys).forEach(type => {
+      if (specialKeys[type].includes(key)) {
+        if (!specialPieces[type]) specialPieces[type] = [];
+        specialPieces[type].push(cat);
+        matched = true;
+      }
+    });
+
+    if (!matched) {
+      Object.keys(specialHints).forEach(type => {
+        if (hasAny(key, specialHints[type])) {
+          if (!specialPieces[type]) specialPieces[type] = [];
+          specialPieces[type].push(cat);
+          matched = true;
         }
+      });
+    }
+  });
 
-        document.querySelectorAll('input[name="motif"]').forEach(radio => {
-            radio.addEventListener('change', function () {
-                const value = this.value;
-                if (value === 'travailleur') {
-                    document.getElementById('catTravailleur').checked = true;
-                } else if (value === 'investisseur') {
-                    document.getElementById('catInvestisseur').checked = true;
-                } else if (value === 'regroupement') {
-                    document.getElementById('catRegroupement').checked = true;
-                }
-                updateDocuments();
-            });
-        });
+  if (commonPieces.length === 0 && Object.keys(specialPieces).length === 0) {
+    commonPieces = [...(allCategories || [])];
+  }
+}
 
-        // Configuration de l'API Back Office
-        // (les détails de configuration sont dans config.js)
+function renderTypeOptions() {
+  const grid = document.getElementById('types-grid');
+  const descriptions = {
+    'TRAVAIL': 'Pour un contrat d\'emploi existant auprès d\'un employeur',
+    'ENTREPRENEUR': 'Pour la création ou la direction d\'une entreprise',
+  };
 
-        document.getElementById('visaForm').addEventListener('submit', async function (e) {
-            e.preventDefault();
+  const displayLabels = {
+    'TRAVAIL': 'Travailleur',
+    'ENTREPRENEUR': 'Investisseur',
+  };
 
-            // Validation de la catégorie de documents
-            const categorie = document.querySelector('input[name="categorie"]:checked')?.value;
-            if (!categorie) {
-                alert('Veuillez sélectionner une catégorie de documents');
-                return;
-            }
+  const filtered = (allTypeVisas || []).filter(type =>
+    ['TRAVAIL', 'ENTREPRENEUR'].includes((type.libelle || '').toUpperCase())
+  );
 
-            // Fonction utilitaire pour convertir les chaînes vides en null
-            const emptyToNull = (value) => value === '' ? null : value;
+  const options = filtered.length > 0
+    ? filtered.map(type => ({ libelle: type.libelle }))
+    : [{ libelle: 'TRAVAIL' }, { libelle: 'ENTREPRENEUR' }];
 
-            // Mapper les données du formulaire au format DemandeDTO du back office
-            const visaRequest = {
-                typeDemande: 'NOUVEAU_TITRE',
-                categorieVisa: categorie.toUpperCase(),
+  grid.innerHTML = options.map(type => {
+    const libelle = type.libelle || '';
+    const description = descriptions[libelle] || '';
+    const display = displayLabels[libelle] || libelle;
+    return `
+      <label class="piece-item" data-visa-type="${libelle}" onclick="selectType('${libelle}')">
+        <div class="piece-check"></div>
+        <div>
+          <div style="font-weight:500;margin-bottom:2px">${display}</div>
+          <div class="text-sm text-muted">${description}</div>
+        </div>
+      </label>
+    `;
+  }).join('');
+}
 
-                // Informations personnelles (structure plate)
-                lastName: emptyToNull(document.getElementById('nom').value),
-                firstNames: emptyToNull(document.getElementById('prenoms').value),
-                maidenName: emptyToNull(document.getElementById('nomJeuneFille').value),
-                birthDate: emptyToNull(document.getElementById('dateNaissance').value),
-                maritalStatus: emptyToNull(document.getElementById('situationFamille').value),
-                nationality: emptyToNull(document.getElementById('nationalite').value),
-                homeAddress: emptyToNull(document.getElementById('domicile').value),
-                occupation: emptyToNull(document.getElementById('profession').value),
-                employerName: emptyToNull(document.getElementById('employeur').value),
-                employerAddress: emptyToNull(document.getElementById('adresse').value),
+function renderNationalites() {
+  const select = document.getElementById('nationality');
+  if (!select) return;
+  const list = (allNationalites && allNationalites.length > 0)
+    ? allNationalites.map(n => n.nom)
+    : ['Malgache', 'Française', 'Portugaise', 'Américaine', 'Chinoise', 'Indienne', 'Autre'];
+  select.innerHTML = '<option value="">— Sélectionner —</option>' + list.map(nom =>
+    `<option value="${nom}">${nom}</option>`
+  ).join('');
+}
 
-                // Visa transformable (précédent)
-                numeroVisaPrcd: emptyToNull(document.getElementById('passeport').value),
-                dateDelivranceVisaPrcd: emptyToNull(document.getElementById('dateDelivrance').value),
-                dateExpirationVisaPrcd: emptyToNull(document.getElementById('dateExpiration').value),
+function renderSituations() {
+  const select = document.getElementById('maritalStatus');
+  if (!select) return;
+  const list = (allSituations && allSituations.length > 0)
+    ? allSituations.map(s => s.libelle)
+    : ['CELIBATAIRE', 'MARIE', 'DIVORCE', 'VEUF'];
+  select.innerHTML = '<option value="">— Sélectionner —</option>' + list.map(libelle =>
+    `<option value="${libelle}">${libelle}</option>`
+  ).join('');
+}
 
-                // Pièces communes
-                aFourniPhotos: document.getElementById('piece1').checked,
-                aFourniNoticeRenseignement: document.getElementById('piece2').checked,
-                aFourniDemandeMinistre: document.getElementById('piece3').checked,
-                aFourniCopieVisa: document.getElementById('piece4').checked,
-                aFourniCopiePasseport: document.getElementById('piece5').checked,
-                aFourniCopieCarteResident: document.getElementById('piece6').checked,
-                aFourniCertificatResidence: document.getElementById('piece7').checked,
-                aFourniExtraitCasierJudiciaire: document.getElementById('piece8').checked,
+function selectType(visaType) {
+  selectedType = visaType;
 
-                // Pièces complémentaires - Travailleur
-                aFourniAutorisationEmploi: document.getElementById('comp1')?.checked || false,
-                aFourniAttestationEmploi: document.getElementById('comp2')?.checked || false,
+  // Update checkmarks
+  const grid = document.getElementById('types-grid');
+  if (!grid) return;
+  grid.querySelectorAll('.piece-check').forEach(el => { el.textContent = ''; });
+  grid.querySelectorAll('.piece-item').forEach(el => { el.classList.remove('checked'); });
 
-                // Pièces complémentaires - Investisseur
-                aFourniStatutSociete: document.getElementById('comp3')?.checked || false,
-                aFourniExtraitRC: document.getElementById('comp4')?.checked || false,
-                aFourniCarteFiscale: document.getElementById('comp5')?.checked || false
-            };
+  const selectedEl = grid.querySelector(`.piece-item[data-visa-type="${visaType}"]`);
+  if (selectedEl) {
+    selectedEl.classList.add('checked');
+    selectedEl.querySelector('.piece-check').textContent = '✓';
+  }
 
-            console.log('Envoi des donnees vers le back office:', JSON.stringify(visaRequest, null, 2));
+  document.getElementById('type-error').style.display = 'none';
+}
 
-            const button = this.querySelector('button[type="submit"]');
-            const originalText = button.textContent;
-            button.textContent = 'Envoi en cours...';
-            button.disabled = true;
+function buildPiecesGrid() {
+  const grid = document.getElementById('pieces-grid');
+  let html = '';
 
-            try {
-                const apiUrl = API_CONFIG.BASE_URL + API_CONFIG.ENDPOINT;
-                console.log('URL API:', apiUrl);
+  if (commonPieces.length === 0 && (!specialPieces[selectedType] || specialPieces[selectedType].length === 0)) {
+    grid.innerHTML = '<div class="text-sm text-muted">Aucune pièce disponible pour ce type pour le moment.</div>';
+    updatePiecesProgress();
+    return;
+  }
 
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(visaRequest)
-                });
+  // Pièces communes
+  html += '<div style="margin-bottom:1.5rem"><h4 style="font-size:14px;font-weight:600;margin-bottom:0.75rem;color:var(--c-text)">Pièces communes</h4>';
+  html += commonPieces.map(p => `
+    <div class="piece-item ${pieceState[p.id] ? 'checked' : ''}" id="pi-${p.id}" onclick="togglePiece(${p.id})">
+      <div class="piece-check">${pieceState[p.id] ? '✓' : ''}</div>
+      <div class="piece-label">${p.libelle || 'Pièce'}</div>
+    </div>
+  `).join('');
+  html += '</div>';
 
-                const result = await response.json();
-                console.log('Reponse du serveur:', result);
+  // Pièces spécifiques
+  const specificPieces = specialPieces[selectedType] || [];
+  if (specificPieces.length > 0) {
+    html += `<div style="margin-bottom:1.5rem"><h4 style="font-size:14px;font-weight:600;margin-bottom:0.75rem;color:var(--c-text)">Pièces pour ${selectedType}</h4>`;
+    html += specificPieces.map(p => `
+      <div class="piece-item ${pieceState[p.id] ? 'checked' : ''}" id="pi-${p.id}" onclick="togglePiece(${p.id})">
+        <div class="piece-check">${pieceState[p.id] ? '✓' : ''}</div>
+        <div class="piece-label">${p.libelle || 'Pièce'}</div>
+      </div>
+    `).join('');
+    html += '</div>';
+  }
 
-                if (response.ok) {
-                    alert('Demande envoyee avec succes!\n\nID Demande: ' + (result.id || result.numerodemande || 'N/A'));
-                    this.reset();
-                } else {
-                    alert('Erreur: ' + (result.message || result.error || 'Erreur inconnue'));
-                }
+  grid.innerHTML = html;
+  updatePiecesProgress();
+}
 
-            } catch (error) {
-                console.error('Erreur lors de l\'envoi:', error);
-                alert('Erreur lors de l\'envoi à l\'API:\n' + error.message + '\n\nAssurez-vous que le back office est en cours d\'exécution sur ' + API_CONFIG.BASE_URL);
-            } finally {
-                button.textContent = originalText;
-                button.disabled = false;
-            }
-        });
+function togglePiece(id) {
+  pieceState[id] = !pieceState[id];
+  const el = document.getElementById('pi-' + id);
+  el.classList.toggle('checked', pieceState[id]);
+  el.querySelector('.piece-check').textContent = pieceState[id] ? '✓' : '';
+  updatePiecesProgress();
+}
 
-        document.querySelectorAll('.checkbox-group input[type="checkbox"]').forEach(checkbox => {
-            checkbox.addEventListener('change', function () {
-                if (this.checked) {
-                    this.parentElement.style.backgroundColor = '#f0f4f8';
-                } else {
-                    this.parentElement.style.backgroundColor = 'transparent';
-                }
-            });
-        });
-    </script>
+function updatePiecesProgress() {
+  const visiblePieces = getVisiblePieces();
+  const done = visiblePieces.filter(p => pieceState[p.id] === true).length;
+  const total = visiblePieces.length;
+  const pct = total > 0 ? Math.round(done / total * 100) : 0;
+  document.getElementById('pf').style.width = pct + '%';
+  document.getElementById('pl').textContent = done + ' pièce' + (done > 1 ? 's' : '') + ' fournie' + (done > 1 ? 's' : '');
+  document.getElementById('pp').textContent = pct + '%';
+  document.getElementById('pieces-count').textContent = done + ' / ' + total;
+}
+
+function setStep(n) {
+  for (let i = 1; i <= 4; i++) {
+    document.getElementById('step' + i).style.display = i === n ? 'block' : 'none';
+    const si = document.getElementById('si' + i);
+    si.className = 'step-item' + (i < n ? ' done' : i === n ? ' active' : '');
+    si.querySelector('.step-dot').textContent = i < n ? '✓' : i;
+  }
+  currentStep = n;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function nextStep(from) {
+  if (from === 1) {
+    if (!selectedType) {
+      document.getElementById('type-error').style.display = 'block';
+      return;
+    }
+  }
+  if (from === 2) {
+    if (!document.getElementById('lastName').value.trim() ||
+        !document.getElementById('firstNames').value.trim() ||
+        !document.getElementById('nationality').value.trim() ||
+        !document.getElementById('maritalStatus').value.trim()) {
+      showToast('Veuillez remplir les champs obligatoires (*)', 'warning');
+      return;
+    }
+  }
+  if (from === 3) buildPiecesGrid();
+  setStep(from + 1);
+}
+
+function prevStep(from) { setStep(from - 1); }
+
+async function submitDemande() {
+  const btn = document.getElementById('btn-submit');
+  btn.disabled = true;
+  document.getElementById('submit-text').textContent = 'Envoi en cours…';
+
+  const typeDemande = mapTypeDemande(selectedType);
+  if (!typeDemande) {
+    showToast('Type de demande invalide.', 'danger');
+    btn.disabled = false;
+    document.getElementById('submit-text').textContent = 'Soumettre la demande';
+    return;
+  }
+
+  const payload = {
+    typeDemande: typeDemande,
+    typeVisa:     selectedType,
+    lastName:     document.getElementById('lastName').value.trim(),
+    firstNames:   document.getElementById('firstNames').value.trim(),
+    maidenName:   document.getElementById('maidenName').value.trim() || null,
+    birthDate:    document.getElementById('birthDate').value || null,
+    maritalStatus: document.getElementById('maritalStatus').value || null,
+    nationality:  document.getElementById('nationality').value.trim(),
+    homeAddress:  document.getElementById('homeAddress').value.trim() || null,
+    occupation:   document.getElementById('occupation').value.trim() || null,
+    employerName: document.getElementById('employerName').value.trim() || null,
+    employerAddress: document.getElementById('employerAddress').value.trim() || null,
+    numeroVisaPrcd: document.getElementById('numeroVisaPrcd').value.trim() || null,
+    dateDelivranceVisaPrcd: document.getElementById('dateDelivranceVisaPrcd').value || null,
+    dateExpirationVisaPrcd: document.getElementById('dateExpirationVisaPrcd').value || null,
+  };
+
+  try {
+    const created = await apiFetch(API.demande_transformation, { method: 'POST', body: payload });
+    const piecesPayload = getVisiblePieces().map(p => ({
+      categoriePieceId: p.id,
+      isProvided: pieceState[p.id] === true,
+    }));
+    if (created && created.id && piecesPayload.length > 0) {
+      await apiFetch(API.demandePieces(created.id), { method: 'PUT', body: piecesPayload });
+    }
+    showToast('Demande soumise avec succès !');
+    setTimeout(() => { window.location.href = 'listing-demandes.html'; }, 1200);
+  } catch (e) {
+    showToast('Erreur : ' + e.message, 'danger');
+    btn.disabled = false;
+    document.getElementById('submit-text').textContent = 'Soumettre la demande';
+  }
+}
+
+function mapTypeDemande(visaType) {
+  const map = {
+    'TRAVAIL': 'NOUVEAU_TITRE_TRAVAILLEUR',
+    'ENTREPRENEUR': 'NOUVEAU_TITRE_INVESTISSEUR'
+  };
+  const desired = map[visaType] || 'NOUVEAU_VISA_TRANSFORMABLE';
+  if (!Array.isArray(allTypeDemandes) || allTypeDemandes.length === 0) {
+    return desired;
+  }
+
+  const upper = desired.toUpperCase();
+  const exact = allTypeDemandes.find(t => (t.nom || '').toUpperCase() === upper);
+  if (exact) return exact.nom;
+
+  const normalized = upper.replace(/[_\s]/g, '');
+  const fuzzy = allTypeDemandes.find(t => ((t.nom || '').toUpperCase().replace(/[_\s]/g, '')) === normalized);
+  if (fuzzy) return fuzzy.nom;
+
+  return (allTypeDemandes[0].nom || desired);
+}
+
+function getVisiblePieces() {
+  const visible = [...commonPieces];
+  const specificPieces = specialPieces[selectedType] || [];
+  return visible.concat(specificPieces);
+}
+
+// Initialize on page load
+initializeForm();
+</script>
 </body>
-
 </html>

@@ -1,267 +1,141 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Demandes de Visa - Madagascar</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .container {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-            max-width: 600px;
-            text-align: center;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 50px 30px;
-        }
-
-        .header h1 {
-            font-size: 32px;
-            margin-bottom: 10px;
-        }
-
-        .header p {
-            font-size: 16px;
-            opacity: 0.9;
-            margin-bottom: 10px;
-        }
-
-        .flag {
-            font-size: 60px;
-            margin: 20px 0;
-        }
-
-        .content {
-            padding: 40px 30px;
-        }
-
-        .content h2 {
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 24px;
-        }
-
-        .content p {
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 30px;
-            font-size: 16px;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 15px;
-            flex-direction: column;
-            margin-bottom: 20px;
-        }
-
-        .btn {
-            padding: 15px 30px;
-            font-size: 16px;
-            font-weight: bold;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-secondary {
-            background-color: #f0f4f8;
-            color: #667eea;
-            border: 2px solid #667eea;
-        }
-
-        .btn-secondary:hover {
-            background-color: #e0e7f1;
-        }
-
-        .features {
-            text-align: left;
-            background-color: #f9f9f9;
-            padding: 20px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-        }
-
-        .features h3 {
-            color: #667eea;
-            margin-bottom: 15px;
-            font-size: 18px;
-        }
-
-        .features ul {
-            list-style: none;
-        }
-
-        .features li {
-            padding: 8px 0;
-            color: #666;
-            border-bottom: 1px solid #eee;
-        }
-
-        .features li:last-child {
-            border-bottom: none;
-        }
-
-        .features li:before {
-            content: "✓ ";
-            color: #667eea;
-            font-weight: bold;
-            margin-right: 10px;
-        }
-
-        .footer {
-            background-color: #f9f9f9;
-            padding: 20px;
-            border-top: 1px solid #eee;
-            color: #999;
-            font-size: 14px;
-        }
-
-        @media (max-width: 600px) {
-            .container {
-                max-width: 100%;
-            }
-
-            .header {
-                padding: 30px 20px;
-            }
-
-            .header h1 {
-                font-size: 24px;
-            }
-
-            .content {
-                padding: 30px 20px;
-            }
-
-            .button-group {
-                gap: 10px;
-            }
-
-            .btn {
-                padding: 12px 20px;
-                font-size: 14px;
-            }
-        }
-    </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Visa Transformable — Accueil</title>
+<link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="flag">Madagascar</div>
-            <h1>Portail de Demande de Visa</h1>
-            <p>République de Madagascar</p>
-            <p style="font-size: 14px; margin-top: 20px;">Demande de Visa Transformable en Long Séjour</p>
-        </div>
 
-        <div class="content">
-            <h2>Bienvenue</h2>
-            <p>Accédez au formulaire de demande de visa transformable en long séjour pour la République de Madagascar.</p>
+<nav class="nav">
+  <a class="nav-brand" href="index.html">Visa <span>Transformable</span></a>
+  <div class="nav-links">
+    <a class="nav-link active" href="index.html">Tableau de bord</a>
+    <a class="nav-link" href="demande-visa-long-sejour.html">Nouvelle demande</a>
+    <a class="nav-link" href="listing-demandes.html">Mes demandes</a>
+  </div>
+</nav>
 
-            <div class="features">
-                <h3>Avantages du portail</h3>
-                <ul>
-                    <li>Soumission simplifiée et sécurisée</li>
-                    <li>Vérification des documents en ligne</li>
-                    <li>Suivi de votre demande en temps réel</li>
-                    <li>Confirmation instantanée par email</li>
-                </ul>
-            </div>
+<main class="page">
+  <div class="page-header">
+    <h1 class="page-title">Tableau de <em>bord</em></h1>
+    <p class="page-sub">Vue d'ensemble de vos demandes de visa transformable</p>
+  </div>
 
-            <div class="button-group">
-                <a href="demande-visa-long-sejour.html" class="btn btn-primary">Nouvelle Demande</a>
-                <a href="gestion-demandes.html" class="btn btn-secondary">Gérer les Dossiers Décentralisés</a>
-                <a href="listing-demandes.html" class="btn btn-secondary">Consulter les Demandes</a>
-            </div>
-        </div>
-
-        <div class="footer">
-            <p>© 2024 Ministère de l'Intérieur et de la Décentralisation</p>
-            <p>Pour toute question, veuillez contacter le support</p>
-        </div>
+  <div class="metrics">
+    <div class="metric">
+      <div class="metric-val" id="stat-total">—</div>
+      <div class="metric-label">Demandes totales</div>
+      <div class="metric-sub">Toutes périodes confondues</div>
     </div>
+    <div class="metric">
+      <div class="metric-val" id="stat-complet">—</div>
+      <div class="metric-label">Dossiers complets</div>
+      <div class="metric-sub">Prêts à traitement</div>
+    </div>
+    <div class="metric">
+      <div class="metric-val" id="stat-incomplet">—</div>
+      <div class="metric-label">Dossiers incomplets</div>
+      <div class="metric-sub">Pièces manquantes</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">Demandes récentes</span>
+      <a class="btn btn-primary btn-sm" href="demande-visa-long-sejour.html">+ Nouvelle demande</a>
+    </div>
+    <div id="demandes-list">
+      <div class="loading-state"><div class="spinner"></div> Chargement des demandes…</div>
+    </div>
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script src="config.js"></script>
+<script>
+async function loadDashboard() {
+  try {
+    const raw = await apiFetch(API.demandes);
+    const demandes = normalizeDemandesForUi(raw);
+    const list = document.getElementById('demandes-list');
+
+    const total = demandes.length;
+    const complet = demandes.filter(d => {
+      const { pct } = countPieces(d);
+      return pct === 100;
+    }).length;
+    const incomplet = total - complet;
+
+    document.getElementById('stat-total').textContent    = total;
+    document.getElementById('stat-complet').textContent  = complet;
+    document.getElementById('stat-incomplet').textContent = incomplet;
+
+    if (!total) {
+      list.innerHTML = `
+        <div class="empty">
+          <div class="empty-icon">📋</div>
+          <div class="empty-title">Aucune demande pour l'instant</div>
+          <div class="empty-sub">Commencez par créer une nouvelle demande de transformation</div>
+        </div>`;
+      return;
+    }
+
+    const recent = demandes.slice(-5).reverse();
+    list.innerHTML = `
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Demandeur</th>
+              <th>Type</th>
+              <th>Avancement</th>
+              <th>Statut</th>
+              <th>Date</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            ${recent.map(d => {
+              const { done, total, pct } = countPieces(d);
+              const s = statusLabel(d.statusValue || (pct === 100 ? 'COMPLET' : 'INCOMPLET'));
+              return `
+              <tr>
+                <td>
+                  <div style="font-weight:500">${d.lastName || '—'} ${d.firstNames || ''}</div>
+                  <div class="text-sm text-muted">${d.nationality || ''}</div>
+                </td>
+                <td>${d.typeVisa || d.typeDemande || '—'}</td>
+                <td style="min-width:140px">
+                  <div class="progress-bar" style="height:4px;margin-bottom:3px">
+                    <div class="progress-fill" style="width:${pct}%"></div>
+                  </div>
+                  <div class="text-sm text-muted">${done}/${total} pièces</div>
+                </td>
+                <td><span class="badge ${s.cls}">${s.label}</span></td>
+                <td class="text-sm text-muted">${formatDate(d.createdAt || d.created_at)}</td>
+                <td>
+                  <a class="btn btn-secondary btn-sm" href="gestion-demandes.html?id=${d.id}">Voir</a>
+                </td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
+      <div style="padding:1rem 0 0;display:flex;justify-content:flex-end">
+        <a class="btn btn-secondary btn-sm" href="listing-demandes.html">Voir toutes les demandes →</a>
+      </div>`;
+  } catch (e) {
+    document.getElementById('demandes-list').innerHTML =
+      `<div class="empty"><div class="empty-icon">⚠️</div>
+       <div class="empty-title">Impossible de charger les données</div>
+       <div class="empty-sub">${e.message}</div></div>`;
+  }
+}
+
+loadDashboard();
+</script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,859 +1,418 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestion des Demandes - Dossiers Décentralisés</title>
-    <script src="config.js"></script>
-    <meta name="description" content="Gestion complète des demandes de visa long séjour - République de Madagascar">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f0f4f8;
-            padding: 20px;
-            color: #333;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-
-        .header h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
-        }
-
-        .header p {
-            font-size: 14px;
-            opacity: 0.9;
-        }
-
-        .content {
-            padding: 30px;
-        }
-
-        .tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-            border-bottom: 2px solid #e0e0e0;
-        }
-
-        .tab-button {
-            padding: 12px 20px;
-            border: none;
-            background: none;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            color: #666;
-            border-bottom: 3px solid transparent;
-            transition: all 0.3s;
-        }
-
-        .tab-button.active {
-            color: #667eea;
-            border-bottom-color: #667eea;
-        }
-
-        .tab-button:hover {
-            color: #667eea;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .section-title {
-            font-size: 20px;
-            font-weight: bold;
-            color: #667eea;
-            margin-bottom: 20px;
-        }
-
-        /* FORMULAIRE */
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .form-row.full {
-            grid-template-columns: 1fr;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .form-group label {
-            font-weight: 600;
-            margin-bottom: 8px;
-            font-size: 14px;
-            color: #333;
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-            font-family: inherit;
-            transition: border-color 0.3s;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
-        }
-
-        .button-group {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .btn {
-            padding: 12px 30px;
-            font-size: 14px;
-            font-weight: bold;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .btn-primary:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-secondary {
-            background-color: #e0e0e0;
-            color: #333;
-        }
-
-        .btn-secondary:hover:not(:disabled) {
-            background-color: #cfcfcf;
-        }
-
-        .btn-danger {
-            background-color: #f44336;
-            color: white;
-        }
-
-        .btn-danger:hover:not(:disabled) {
-            background-color: #da190b;
-        }
-
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        /* TABLEAU */
-        .table-container {
-            overflow-x: auto;
-            margin-top: 20px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: white;
-        }
-
-        thead {
-            background-color: #f5f5f5;
-            border-bottom: 2px solid #e0e0e0;
-        }
-
-        th {
-            padding: 12px;
-            text-align: left;
-            font-weight: bold;
-            color: #333;
-            font-size: 14px;
-        }
-
-        td {
-            padding: 12px;
-            border-bottom: 1px solid #e0e0e0;
-            font-size: 14px;
-        }
-
-        tr:hover {
-            background-color: #f9f9f9;
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            text-align: center;
-        }
-
-        .status-cree {
-            background-color: #e3f2fd;
-            color: #1565c0;
-        }
-
-        .status-en-cours {
-            background-color: #fff3e0;
-            color: #e65100;
-        }
-
-        .status-documents-manquants {
-            background-color: #ffebee;
-            color: #b71c1c;
-        }
-
-        .status-valide {
-            background-color: #e8f5e9;
-            color: #2e7d32;
-        }
-
-        .constat {
-            font-size: 12px;
-            color: #d32f2f;
-            font-style: italic;
-            max-width: 300px;
-            white-space: normal;
-        }
-
-        .actions {
-            display: flex;
-            gap: 5px;
-        }
-
-        .btn-small {
-            padding: 6px 12px;
-            font-size: 12px;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-edit {
-            background-color: #2196F3;
-            color: white;
-        }
-
-        .btn-edit:hover {
-            background-color: #1976D2;
-        }
-
-        .btn-edit {
-            background-color: #2196F3;
-            color: white;
-        }
-
-        .btn-edit:hover {
-            background-color: #1976D2;
-        }
-
-        .btn-delete {
-            background-color: #f44336;
-            color: white;
-        }
-
-        .btn-delete:hover {
-            background-color: #da190b;
-        }
-
-        .alert {
-            padding: 15px;
-            border-radius: 4px;
-            margin-bottom: 20px;
-            display: none;
-        }
-
-        .alert.show {
-            display: block;
-        }
-
-        .alert-success {
-            background-color: #e8f5e9;
-            color: #2e7d32;
-            border: 1px solid #4caf50;
-        }
-
-        .alert-error {
-            background-color: #ffebee;
-            color: #b71c1c;
-            border: 1px solid #f44336;
-        }
-
-        .alert-info {
-            background-color: #e3f2fd;
-            color: #1565c0;
-            border: 1px solid #2196F3;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            color: #999;
-        }
-
-        .empty-state p {
-            font-size: 16px;
-            margin-bottom: 20px;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 20px;
-            color: #667eea;
-        }
-
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 10px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        @media (max-width: 768px) {
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-
-            .table-container {
-                font-size: 12px;
-            }
-
-            th, td {
-                padding: 8px;
-            }
-
-            .button-group {
-                flex-direction: column;
-            }
-
-            .actions {
-                flex-direction: column;
-            }
-        }
-    </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Gestion du dossier — Visa Transformable</title>
+<link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Gestion des Demandes</h1>
-            <p>Dossiers Décentralisés - Gestion complète des demandes de visa</p>
-            <p style="margin-top:8px; font-size:12px; opacity:0.8;">
-                <a href="listing-demandes.html" style="color:white; text-decoration:underline;">📋 Vue Listing complète</a>
-            </p>
+
+<nav class="nav">
+  <a class="nav-brand" href="index.html">Visa <span>Transformable</span></a>
+  <div class="nav-links">
+    <a class="nav-link" href="index.html">Tableau de bord</a>
+    <a class="nav-link" href="demande-visa-long-sejour.html">Nouvelle demande</a>
+    <a class="nav-link" href="listing-demandes.html">Mes demandes</a>
+  </div>
+</nav>
+
+<main class="page">
+  <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem">
+    <div>
+      <a href="listing-demandes.html" class="text-sm text-muted" style="display:inline-flex;align-items:center;gap:4px;margin-bottom:8px">
+        ← Retour à la liste
+      </a>
+      <h1 class="page-title" id="page-title">Dossier <em>#—</em></h1>
+      <p class="page-sub" id="page-sub">Chargement…</p>
+    </div>
+    <div id="status-badge-wrap" style="margin-top:0.5rem"></div>
+  </div>
+
+  <!-- Loading -->
+  <div id="loading-state">
+    <div class="loading-state"><div class="spinner"></div> Chargement du dossier…</div>
+  </div>
+
+  <!-- Content (hidden until loaded) -->
+  <div id="content" style="display:none">
+
+    <!-- Avancement des pièces -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Avancement du dossier</span>
+        <span class="badge badge-neutral" id="pieces-count">0 / 13</span>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+        <div class="progress-meta">
+          <span id="progress-label">0 pièce fournie</span>
+          <span id="progress-pct">0%</span>
         </div>
-
-        <div class="content">
-            <div class="alert" id="alertMessage"></div>
-
-            <div class="tabs">
-                <button class="tab-button active" data-tab="creation" onclick="switchTab('creation', this)">+ Nouvelle Demande</button>
-                <button class="tab-button" data-tab="listing" onclick="switchTab('listing', this)">Mes Demandes</button>
-            </div>
-
-            <!-- TAB 1: CRÉATION -->
-            <div id="creation" class="tab-content active">
-                <h2 class="section-title">Créer une Nouvelle Demande</h2>
-
-                <form id="demandeForm">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="nom">Nom du Demandeur *</label>
-                            <input type="text" id="nom" name="nom" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="prenoms">Prénoms *</label>
-                            <input type="text" id="prenoms" name="prenoms" required>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="dateNaissance">Date de Naissance *</label>
-                            <input type="date" id="dateNaissance" name="dateNaissance" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="nationalite">Nationalité *</label>
-                            <input type="text" id="nationalite" name="nationalite" required>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="maidenName">Nom de Jeune Fille</label>
-                            <input type="text" id="maidenName" name="maidenName">
-                        </div>
-                        <div class="form-group">
-                            <label for="maritalStatus">Situation Familiale *</label>
-                            <select id="maritalStatus" name="maritalStatus" required>
-                                <option value="">-- Sélectionner --</option>
-                                <option value="CELIBATAIRE">Célibataire</option>
-                                <option value="MARIE">Marié(e)</option>
-                                <option value="DIVORCE">Divorcé(e)</option>
-                                <option value="VEUF">Veuf(ve)</option>
-                                <option value="UNION_LIBRE">Union Libre</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="profession">Profession *</label>
-                            <input type="text" id="profession" name="profession" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="employeur">Employeur</label>
-                            <input type="text" id="employeur" name="employeur">
-                        </div>
-                    </div>
-
-                    <div class="form-row full">
-                        <div class="form-group">
-                            <label for="employerAddress">Adresse Employeur</label>
-                            <input type="text" id="employerAddress" name="employerAddress">
-                        </div>
-                    </div>
-
-                    <div class="form-row full">
-                        <div class="form-group">
-                            <label for="domicile">Domicile Habituel *</label>
-                            <input type="text" id="domicile" name="domicile" required>
-                        </div>
-                    </div>
-
-                    <div class="form-row full" id="previousVisaSection" style="display: none;">
-                        <h3 style="color: #667eea; margin-bottom: 10px;">Visa Transformable Précédent</h3>
-                    </div>
-
-                    <div class="form-row" id="previousVisaFieldsRow" style="display: none;">
-                        <div class="form-group">
-                            <label for="numeroVisaPrcd">Numéro de Visa</label>
-                            <input type="text" id="numeroVisaPrcd" name="numeroVisaPrcd">
-                        </div>
-                        <div class="form-group">
-                            <label for="dateDelivranceVisaPrcd">Date de Délivrance</label>
-                            <input type="date" id="dateDelivranceVisaPrcd" name="dateDelivranceVisaPrcd">
-                        </div>
-                    </div>
-
-                    <div class="form-row" id="previousVisaExpiryRow" style="display: none;">
-                        <div class="form-group">
-                            <label for="dateExpirationVisaPrcd">Date d'Expiration</label>
-                            <input type="date" id="dateExpirationVisaPrcd" name="dateExpirationVisaPrcd">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="typeVisa">Type de Visa *</label>
-                            <select id="typeVisa" name="typeVisa" required>
-                                <option value="">-- Sélectionner --</option>
-                                <option value="TRAVAILLEUR">Travailleur</option>
-                                <option value="INVESTISSEUR">Investisseur</option>
-                                <option value="REGROUPEMENT">Regroupement Familial</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="typeDemande">Type de Demande *</label>
-                            <select id="typeDemande" name="typeDemande" required>
-                                <option value="">-- Sélectionner --</option>
-                                <option value="NOUVEAU_TITRE">Nouveau Titre</option>
-                                <option value="RENOUVELLEMENT">Renouvellement</option>
-                                <option value="TRANSFORMATION">Transformation</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="button-group">
-                        <button type="submit" class="btn btn-primary">Créer la Demande</button>
-                        <button type="reset" class="btn btn-secondary">Réinitialiser</button>
-                        <button type="button" class="btn btn-secondary" id="cancelEditBtn" style="display: none;" onclick="cancelEdit()">Annuler la Modification</button>
-                    </div>
-                </form>
-            </div>
-
-            <!-- TAB 2: LISTING -->
-            <div id="listing" class="tab-content">
-                <h2 class="section-title">Mes Demandes</h2>
-
-                <div class="table-container">
-                    <div id="loadingMessage" class="loading" style="display: none;">
-                        <div class="spinner"></div>
-                        <p>Chargement des demandes...</p>
-                    </div>
-                    <table id="demandesTable" style="display: none;">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Demandeur</th>
-                                <th>Profession</th>
-                                <th>Catégorie</th>
-                                <th>Statut</th>
-                                <th>Date</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="demandesBody">
-                        </tbody>
-                    </table>
-                    <div id="emptyMessage" class="empty-state" style="display: none;">
-                        <p>Aucune demande trouvée.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="pieces-grid" id="pieces-grid"></div>
+      <div class="btn-row" style="margin-top:1rem">
+        <button class="btn btn-primary" onclick="savePieces()">Enregistrer les pièces</button>
+      </div>
     </div>
 
-    <script>
-        // ═══════════════════════════════════════════════════════════════
-        // MODE ÉDITION
-        // ═══════════════════════════════════════════════════════════════
-        let editingId = null;
+    <!-- Informations du demandeur -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Informations du demandeur</span>
+      </div>
+      <div class="form-grid">
+        <div class="field">
+          <label>Nom de famille *</label>
+          <input type="text" id="e-lastName"/>
+        </div>
+        <div class="field">
+          <label>Prénom(s) *</label>
+          <input type="text" id="e-firstNames"/>
+        </div>
+        <div class="field">
+          <label>Nom de jeune fille</label>
+          <input type="text" id="e-maidenName"/>
+        </div>
+        <div class="field">
+          <label>Date de naissance</label>
+          <input type="date" id="e-birthDate"/>
+        </div>
+        <div class="field">
+          <label>Situation familiale</label>
+          <select id="e-maritalStatus">
+            <option value="">— Sélectionner —</option>
+            <option value="CELIBATAIRE">Célibataire</option>
+            <option value="MARIE">Marié(e)</option>
+            <option value="DIVORCE">Divorcé(e)</option>
+            <option value="VEUF">Veuf / Veuve</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Nationalité</label>
+          <input type="text" id="e-nationality"/>
+        </div>
+        <div class="field form-full">
+          <label>Adresse de domicile</label>
+          <input type="text" id="e-homeAddress"/>
+        </div>
+        <div class="field">
+          <label>Profession / Occupation</label>
+          <input type="text" id="e-occupation"/>
+        </div>
+        <div class="field">
+          <label>Employeur / Société</label>
+          <input type="text" id="e-employerName"/>
+        </div>
+        <div class="field form-full">
+          <label>Adresse employeur</label>
+          <input type="text" id="e-employerAddress"/>
+        </div>
+      </div>
+    </div>
 
-        // ─── Chargement Auto depuis URL (?edit=ID) ────────────────────
-        document.addEventListener('DOMContentLoaded', () => {
-            const params = new URLSearchParams(window.location.search);
-            const editId = params.get('edit');
-            if (editId) {
-                editDemande(Number(editId));
-            }
-        });
+    <!-- Visa précédent -->
+    <div class="card">
+      <div class="card-header"><span class="card-title">Visa transformable précédent</span></div>
+      <div class="form-grid cols-3">
+        <div class="field">
+          <label>Numéro du visa précédent</label>
+          <input type="text" id="e-numeroVisaPrcd"/>
+        </div>
+        <div class="field">
+          <label>Date de délivrance</label>
+          <input type="date" id="e-dateDelivranceVisaPrcd"/>
+        </div>
+        <div class="field">
+          <label>Date d'expiration</label>
+          <input type="date" id="e-dateExpirationVisaPrcd"/>
+        </div>
+      </div>
+    </div>
 
-        // ═══════════════════════════════════════════════════════════════
-        // GESTION DES TABS
-        // ═══════════════════════════════════════════════════════════════
-        function switchTab(tabName, triggerEl) {
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            document.querySelectorAll('.tab-button').forEach(btn => {
-                btn.classList.remove('active');
-            });
+    <!-- Type de visa -->
+    <div class="card">
+      <div class="card-header"><span class="card-title">Type de visa</span></div>
+      <div class="form-grid">
+        <div class="field">
+          <label>Type de demande</label>
+          <select id="e-typeDemande">
+            <option value="TRANSFORMATION">Transformation</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Type de visa</label>
+          <select id="e-typeVisa">
+            <option value="TRAVAIL">Travail</option>
+            <option value="ENTREPRENEUR">Entrepreneur</option>
+          </select>
+        </div>
+      </div>
+    </div>
 
-            document.getElementById(tabName).classList.add('active');
-            if (triggerEl) {
-                triggerEl.classList.add('active');
-            } else {
-                // Activer visuellement le bon bouton selon le nom
-                document.querySelectorAll('.tab-button').forEach(btn => {
-                    if (btn.getAttribute('data-tab') === tabName) btn.classList.add('active');
-                });
-            }
+    <div class="btn-row">
+      <a class="btn btn-secondary" href="listing-demandes.html">Annuler</a>
+      <button class="btn btn-primary" id="btn-save" onclick="saveDemande()">
+        <span id="save-text">Enregistrer les modifications</span>
+      </button>
+    </div>
 
-            if (tabName === 'listing') {
-                loadDemandes();
-            }
-        }
+  </div>
+</main>
 
-        // ═══════════════════════════════════════════════════════════════
-        // FORMATAGE DU STATUT
-        // ═══════════════════════════════════════════════════════════════
-        function formatStatus(status) {
-            const map = {
-                'CREE': 'Créé',
-                'EN_COURS': 'En Cours',
-                'DOCUMENTS_MANQUANTS': 'Documents Manquants',
-                'VALIDE': 'Validé'
-            };
-            return map[status] || status || '—';
-        }
+<div class="toast" id="toast"></div>
+<script src="config.js"></script>
+<script>
+let currentData = {};
+let demandeId = null;
+let piecesList = [];
 
-        // ═══════════════════════════════════════════════════════════════
-        // ALERTES
-        // ═══════════════════════════════════════════════════════════════
-        function showAlert(message, type = 'success') {
-            const alertEl = document.getElementById('alertMessage');
-            alertEl.textContent = message;
-            alertEl.className = `alert show alert-${type}`;
-            setTimeout(() => {
-                alertEl.classList.remove('show');
-            }, 4000);
-        }
+const DTO_FIELDS = [
+  'typeDemande',
+  'typeVisa',
+  'idDemandeur',
+  'lastName',
+  'firstNames',
+  'maidenName',
+  'birthDate',
+  'maritalStatus',
+  'nationality',
+  'homeAddress',
+  'occupation',
+  'employerName',
+  'employerAddress',
+  'numeroVisaPrcd',
+  'dateDelivranceVisaPrcd',
+  'dateExpirationVisaPrcd'
+];
 
-        // ═══════════════════════════════════════════════════════════════
-        // CHARGEMENT DES DEMANDES (API)
-        // ═══════════════════════════════════════════════════════════════
-        async function loadDemandes() {
-            const loadingMsg = document.getElementById('loadingMessage');
-            const table = document.getElementById('demandesTable');
-            const tbody = document.getElementById('demandesBody');
-            const emptyMsg = document.getElementById('emptyMessage');
+function getIdFromUrl() {
+  return new URLSearchParams(window.location.search).get('id');
+}
 
-            loadingMsg.style.display = 'block';
-            table.style.display = 'none';
-            emptyMsg.style.display = 'none';
+function setVal(id, val) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.value = val || '';
+}
 
-            try {
-                const response = await fetch(API_CONFIG.BASE_URL + '/api/visa/demandes', {
-                    method: 'GET',
-                    headers: { 'Content-Type': 'application/json' }
-                });
+function getVal(id) {
+  const el = document.getElementById(id);
+  return el ? el.value.trim() || null : null;
+}
 
-                if (!response.ok) {
-                    throw new Error('Erreur lors du chargement des demandes');
-                }
+function normalizeDemande(d) {
+  const demandeur = d.demandeur || {};
+  const nationalite = demandeur.nationalite || {};
+  const situation = demandeur.situationFamille || {};
+  const typeDemande = d.typeDemande || {};
 
-                const demandes = await response.json();
+  const data = {
+    idDemandeur: demandeur.id || null,
+    lastName: d.lastName || demandeur.nom || null,
+    firstNames: d.firstNames || demandeur.prenom || null,
+    maidenName: d.maidenName || null,
+    birthDate: d.birthDate || demandeur.dateNaissance || null,
+    maritalStatus: d.maritalStatus || situation.libelle || null,
+    nationality: d.nationality || nationalite.nom || null,
+    homeAddress: d.homeAddress || null,
+    occupation: d.occupation || null,
+    employerName: d.employerName || null,
+    employerAddress: d.employerAddress || null,
+    numeroVisaPrcd: d.numeroVisaPrcd || null,
+    dateDelivranceVisaPrcd: d.dateDelivranceVisaPrcd || null,
+    dateExpirationVisaPrcd: d.dateExpirationVisaPrcd || null,
+    typeDemande: (typeDemande.nom || d.typeDemande) || null,
+    typeVisa: d.typeVisa || null,
+  };
 
-                if (demandes.length === 0) {
-                    emptyMsg.style.display = 'block';
-                } else {
-                    tbody.innerHTML = demandes.map(d => `
-                        <tr>
-                            <td>#${d.id}</td>
-                            <td><strong>${d.demandeur?.nom || '—'} ${d.demandeur?.prenom || '—'}</strong></td>
-                            <td>${d.demandeur?.profession || '—'}</td>
-                            <td>${d.typeDemande?.nom || '—'}</td>
-                            <td><span class="status-badge status-${(d.status?.status || '').toLowerCase().replace(/_/g, '-')}">${formatStatus(d.status?.status)}</span></td>
-                            <td>${d.createdAt ? new Date(d.createdAt).toLocaleDateString('fr-FR') : '—'}</td>
-                            <td class="actions">
-                                <button class="btn-small btn-edit" onclick="editDemande(${d.id})">Modifier</button>
-                                <button class="btn-small btn-delete" onclick="deleteDemande(${d.id})">Supprimer</button>
-                            </td>
-                        </tr>
-                    `).join('');
-                    table.style.display = 'table';
-                }
-            } catch (error) {
-                showAlert('Erreur: ' + error.message, 'error');
-                emptyMsg.style.display = 'block';
-            } finally {
-                loadingMsg.style.display = 'none';
-            }
-        }
+  return data;
+}
 
-        // ═══════════════════════════════════════════════════════════════
-        // AFFICHAGE CONDITIONNEL DES CHAMPS VISA TRANSFORMABLE
-        // ═══════════════════════════════════════════════════════════════
-        document.getElementById('typeDemande').addEventListener('change', function() {
-            const showPreviousVisa = this.value === 'TRANSFORMATION';
-            document.getElementById('previousVisaSection').style.display = showPreviousVisa ? 'block' : 'none';
-            document.getElementById('previousVisaFieldsRow').style.display = showPreviousVisa ? 'grid' : 'none';
-            document.getElementById('previousVisaExpiryRow').style.display = showPreviousVisa ? 'grid' : 'none';
-        });
+function buildDemandePayload(overrides = {}) {
+  const payload = {};
+  DTO_FIELDS.forEach(key => {
+    if (currentData[key] !== undefined) {
+      payload[key] = currentData[key];
+    }
+  });
 
-        // ═══════════════════════════════════════════════════════════════
-        // FORMULAIRE SOUMISSION
-        // ═══════════════════════════════════════════════════════════════
-        document.getElementById('demandeForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
+  Object.keys(overrides).forEach(key => {
+    payload[key] = overrides[key];
+  });
 
-            const demandeDTO = {
-                typeDemande: document.getElementById('typeDemande').value,
-                typeVisa: document.getElementById('typeVisa').value,
-                lastName: document.getElementById('nom').value,
-                firstNames: document.getElementById('prenoms').value,
-                maidenName: document.getElementById('maidenName').value,
-                birthDate: document.getElementById('dateNaissance').value,
-                maritalStatus: document.getElementById('maritalStatus').value,
-                nationality: document.getElementById('nationalite').value,
-                homeAddress: document.getElementById('domicile').value,
-                occupation: document.getElementById('profession').value,
-                employerName: document.getElementById('employeur').value,
-                employerAddress: document.getElementById('employerAddress').value,
-                numeroVisaPrcd: document.getElementById('numeroVisaPrcd').value,
-                dateDelivranceVisaPrcd: document.getElementById('dateDelivranceVisaPrcd').value,
-                dateExpirationVisaPrcd: document.getElementById('dateExpirationVisaPrcd').value,
-                aFourniPhotos: false,
-                aFourniCopiePasseport: false,
-                aFourniCopieVisa: false,
-                aFourniCertificatResidence: false,
-                aFourniExtraitCasierJudiciaire: false,
-                aFourniNoticeRenseignement: false,
-                aFourniDemandeMinistre: false,
-                aFourniCopieCarteResident: false,
-                aFourniAutorisationEmploi: false,
-                aFourniAttestationEmploi: false,
-                aFourniStatutSociete: false,
-                aFourniExtraitRC: false,
-                aFourniCarteFiscale: false
-            };
+  return payload;
+}
 
-            try {
-                const button = this.querySelector('button[type="submit"]');
-                button.disabled = true;
-                const originalText = button.textContent;
-                button.textContent = editingId ? 'Mise à jour...' : 'Envoi en cours...';
+async function loadPieces() {
+  try {
+    const raw = await apiFetch(API.demandePieces(demandeId));
+    piecesList = (raw || []).map(p => ({
+      categoriePieceId: p.categoriePieceId || (p.categoriePiece ? p.categoriePiece.id : null),
+      libelle: p.libelle || (p.categoriePiece ? p.categoriePiece.libelle : null),
+      isProvided: p.isProvided === true || p.is_provided === true,
+    }));
+  } catch (e) {
+    piecesList = [];
+  }
+  buildPiecesGrid();
+}
 
-                const method = editingId ? 'PUT' : 'POST';
-                const url = editingId
-                    ? API_CONFIG.BASE_URL + '/api/visa/demandes/' + editingId
-                    : API_CONFIG.BASE_URL + '/api/visa/demandes';
+function populateForm(d) {
+  setVal('e-lastName',               d.lastName);
+  setVal('e-firstNames',             d.firstNames);
+  setVal('e-maidenName',             d.maidenName);
+  setVal('e-birthDate',              d.birthDate);
+  setVal('e-maritalStatus',          d.maritalStatus);
+  setVal('e-nationality',            d.nationality);
+  setVal('e-homeAddress',            d.homeAddress);
+  setVal('e-occupation',             d.occupation);
+  setVal('e-employerName',           d.employerName);
+  setVal('e-employerAddress',        d.employerAddress);
+  setVal('e-numeroVisaPrcd',         d.numeroVisaPrcd);
+  setVal('e-dateDelivranceVisaPrcd', d.dateDelivranceVisaPrcd);
+  setVal('e-dateExpirationVisaPrcd', d.dateExpirationVisaPrcd);
+  setVal('e-typeDemande',            d.typeDemande || 'TRANSFORMATION');
+  setVal('e-typeVisa',               d.typeVisa);
+}
 
-                const response = await fetch(url, {
-                    method: method,
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(demandeDTO)
-                });
+function buildPiecesGrid() {
+  const grid = document.getElementById('pieces-grid');
+  if (!piecesList.length) {
+    grid.innerHTML = '<div class="text-sm text-muted">Aucune pièce à afficher pour ce dossier.</div>';
+    updateProgress();
+    return;
+  }
 
-                if (response.ok) {
-                    const result = await response.json();
-                    showAlert(editingId ? 'Demande mise à jour avec succès!' : 'Demande créée avec succès! ID: ' + result.id, 'success');
-                    this.reset();
-                    editingId = null;
-                    button.textContent = 'Créer la Demande';
-                    loadDemandes();
-                } else {
-                    const errorData = await response.json().catch(() => ({}));
-                    showAlert('Erreur: ' + (errorData.message || 'Erreur serveur'), 'error');
-                }
-            } catch (error) {
-                showAlert('Erreur: ' + error.message, 'error');
-            } finally {
-                const button = this.querySelector('button[type="submit"]');
-                button.disabled = false;
-                button.textContent = editingId ? 'Mettre à Jour la Demande' : 'Créer la Demande';
-            }
-        });
+  grid.innerHTML = piecesList.map(p => {
+    const checked = p.isProvided === true;
+    const label = p.libelle || 'Pièce';
+    return `
+      <div class="piece-item ${checked ? 'checked' : ''}" id="pi-${p.categoriePieceId}" onclick="togglePiece(${p.categoriePieceId})">
+        <div class="piece-check">${checked ? '✓' : ''}</div>
+        <div class="piece-label">${label}</div>
+      </div>`;
+  }).join('');
+  updateProgress();
+}
 
-        // ═══════════════════════════════════════════════════════════════
-        // SUPPRIMER DEMANDE
-        // ═══════════════════════════════════════════════════════════════
-        function cancelEdit() {
-            editingId = null;
-            const form = document.getElementById('demandeForm');
-            form.reset();
-            const submitBtn = form.querySelector('button[type="submit"]');
-            submitBtn.textContent = 'Créer la Demande';
-            document.getElementById('cancelEditBtn').style.display = 'none';
-            document.getElementById('previousVisaSection').style.display = 'none';
-            document.getElementById('previousVisaFieldsRow').style.display = 'none';
-            document.getElementById('previousVisaExpiryRow').style.display = 'none';
-        }
+function togglePiece(categoriePieceId) {
+  const piece = piecesList.find(p => p.categoriePieceId === categoriePieceId);
+  if (!piece) return;
+  piece.isProvided = !piece.isProvided;
+  const el = document.getElementById('pi-' + categoriePieceId);
+  el.classList.toggle('checked', piece.isProvided);
+  el.querySelector('.piece-check').textContent = piece.isProvided ? '✓' : '';
+  updateProgress();
+}
 
-        // ═══════════════════════════════════════════════════════════════
-        // ÉDITER DEMANDE
-        // ═══════════════════════════════════════════════════════════════
-        async function editDemande(id) {
-            try {
-                const response = await fetch(API_CONFIG.BASE_URL + '/api/visa/demandes/' + id, {
-                    method: 'GET',
-                    headers: { 'Content-Type': 'application/json' }
-                });
+function updateProgress() {
+  const { done, total, pct } = countPieces({ pieces: piecesList });
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-label').textContent = done + ' pièce' + (done > 1 ? 's' : '') + ' fournie' + (done > 1 ? 's' : '');
+  document.getElementById('progress-pct').textContent = pct + '%';
+  document.getElementById('pieces-count').textContent = done + ' / ' + total;
 
-                if (!response.ok) {
-                    showAlert('Erreur lors du chargement de la demande', 'error');
-                    return;
-                }
+  const badge = statusLabel(pct === 100 ? 'COMPLET' : 'INCOMPLET');
+  document.getElementById('status-badge-wrap').innerHTML =
+    `<span class="badge ${badge.cls}" style="font-size:13px;padding:5px 14px">${badge.label}</span>`;
+}
 
-                const demande = await response.json();
-                editingId = demande.id;
+async function loadDemande() {
+  demandeId = getIdFromUrl();
+  if (!demandeId) {
+    document.getElementById('loading-state').innerHTML =
+      `<div class="empty"><div class="empty-icon">⚠️</div>
+       <div class="empty-title">Aucun identifiant de demande</div>
+       <div class="empty-sub"><a href="listing-demandes.html">Retour à la liste</a></div></div>`;
+    return;
+  }
 
-                // Remplir le formulaire avec les données existantes
-                // L'API retourne le modèle Demande sérialisé : demande.demandeur.nom, etc.
-                document.getElementById('nom').value = demande.demandeur?.nom || '';
-                document.getElementById('prenoms').value = demande.demandeur?.prenom || '';
-                // dateNaissance peut être un tableau [yyyy,mm,dd] ou une string ISO
-                const dn = demande.demandeur?.dateNaissance;
-                document.getElementById('dateNaissance').value = Array.isArray(dn)
-                    ? `${dn[0]}-${String(dn[1]).padStart(2,'0')}-${String(dn[2]).padStart(2,'0')}`
-                    : (dn || '');
-                document.getElementById('nationalite').value = demande.demandeur?.nationalite?.nom || '';
-                document.getElementById('maidenName').value = '';
-                document.getElementById('maritalStatus').value = demande.demandeur?.situationFamille?.libelle?.toUpperCase() || '';
-                document.getElementById('profession').value = '';
-                document.getElementById('employeur').value = '';
-                document.getElementById('employerAddress').value = '';
-                document.getElementById('domicile').value = '';
-                document.getElementById('typeDemande').value = demande.typeDemande?.nom || '';
-                document.getElementById('typeVisa').value = '';
+  try {
+    const d = await apiFetch(API.demandeById(demandeId));
+    currentData = normalizeDemande(d);
 
-                // Afficher les champs visa transformable si nécessaire
-                if (demande.typeDemande?.nom === 'TRANSFORMATION') {
-                    document.getElementById('previousVisaSection').style.display = 'block';
-                    document.getElementById('previousVisaFieldsRow').style.display = 'grid';
-                    document.getElementById('previousVisaExpiryRow').style.display = 'grid';
-                }
+    document.getElementById('page-title').innerHTML = `Dossier <em>#${demandeId}</em>`;
+    document.getElementById('page-sub').textContent =
+      `${currentData.lastName || ''} ${currentData.firstNames || ''} — ${currentData.typeVisa || currentData.typeDemande || ''}`;
 
-                // Changer le texte du bouton et basculer vers l'onglet de création
-                const submitBtn = document.querySelector('#demandeForm button[type="submit"]');
-                submitBtn.textContent = 'Mettre à Jour la Demande';
-                document.getElementById('cancelEditBtn').style.display = 'inline-block';
+    populateForm(currentData);
+    await loadPieces();
 
-                // Basculer vers l'onglet création sans event
-                switchTab('creation');
+    document.getElementById('loading-state').style.display = 'none';
+    document.getElementById('content').style.display = 'block';
+  } catch (e) {
+    document.getElementById('loading-state').innerHTML =
+      `<div class="empty"><div class="empty-icon">⚠️</div>
+       <div class="empty-title">Erreur de chargement</div>
+       <div class="empty-sub">${e.message}</div></div>`;
+  }
+}
 
-                // Faire défiler vers le formulaire
-                document.querySelector('.section-title').scrollIntoView({ behavior: 'smooth' });
+async function savePieces() {
+  const payload = piecesList.map(p => ({
+    categoriePieceId: p.categoriePieceId,
+    isProvided: p.isProvided === true,
+  }));
 
-            } catch (error) {
-                showAlert('Erreur: ' + error.message, 'error');
-            }
-        }
+  try {
+    const updated = await apiFetch(API.demandePieces(demandeId), {
+      method: 'PUT',
+      body: payload,
+    });
+    piecesList = (updated || []).map(p => ({
+      categoriePieceId: p.categoriePieceId || (p.categoriePiece ? p.categoriePiece.id : null),
+      libelle: p.libelle || (p.categoriePiece ? p.categoriePiece.libelle : null),
+      isProvided: p.isProvided === true || p.is_provided === true,
+    }));
+    buildPiecesGrid();
+    showToast('Pièces enregistrées !');
+  } catch (e) {
+    showToast('Erreur : ' + e.message, 'danger');
+  }
+}
 
-        // ═══════════════════════════════════════════════════════════════
-        // SUPPRIMER DEMANDE
-        // ═══════════════════════════════════════════════════════════════
-        async function deleteDemande(id) {
-            if (confirm('Êtes-vous sûr de vouloir supprimer cette demande?')) {
-                try {
-                    const response = await fetch(API_CONFIG.BASE_URL + '/api/visa/demandes/' + id, {
-                        method: 'DELETE',
-                        headers: { 'Content-Type': 'application/json' }
-                    });
+async function saveDemande() {
+  const payload = buildDemandePayload({
+    lastName: getVal('e-lastName'),
+    firstNames: getVal('e-firstNames'),
+    maidenName: getVal('e-maidenName'),
+    birthDate: getVal('e-birthDate'),
+    maritalStatus: getVal('e-maritalStatus'),
+    nationality: getVal('e-nationality'),
+    homeAddress: getVal('e-homeAddress'),
+    occupation: getVal('e-occupation'),
+    employerName: getVal('e-employerName'),
+    employerAddress: getVal('e-employerAddress'),
+    numeroVisaPrcd: getVal('e-numeroVisaPrcd'),
+    dateDelivranceVisaPrcd: getVal('e-dateDelivranceVisaPrcd'),
+    dateExpirationVisaPrcd: getVal('e-dateExpirationVisaPrcd'),
+    typeDemande: getVal('e-typeDemande'),
+    typeVisa: getVal('e-typeVisa'),
+  });
+  await save(payload, 'Modifications enregistrées !');
+}
 
-                    if (response.ok) {
-                        showAlert('Demande supprimée avec succès', 'success');
-                        loadDemandes();
-                    } else {
-                        showAlert('Erreur lors de la suppression', 'error');
-                    }
-                } catch (error) {
-                    showAlert('Erreur: ' + error.message, 'error');
-                }
-            }
-        }
-    </script>
+async function save(payload, msg) {
+  const btn = document.getElementById('btn-save');
+  if (btn) { btn.disabled = true; document.getElementById('save-text').textContent = 'Enregistrement…'; }
+  try {
+    const updated = await apiFetch(API.demandeById(demandeId), {
+      method: 'PUT',
+      body: payload,
+    });
+    currentData = { ...currentData, ...updated };
+    updateProgress();
+    showToast(msg);
+  } catch (e) {
+    showToast('Erreur : ' + e.message, 'danger');
+  } finally {
+    if (btn) { btn.disabled = false; document.getElementById('save-text').textContent = 'Enregistrer les modifications'; }
+  }
+}
+
+loadDemande();
+</script>
 </body>
 </html>
