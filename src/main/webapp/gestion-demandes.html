@@ -80,13 +80,13 @@
           <input type="date" id="e-birthDate"/>
         </div>
         <div class="field">
+          <label>Lieu de naissance</label>
+          <input type="text" id="e-birthPlace"/>
+        </div>
+        <div class="field">
           <label>Situation familiale</label>
           <select id="e-maritalStatus">
             <option value="">— Sélectionner —</option>
-            <option value="CELIBATAIRE">Célibataire</option>
-            <option value="MARIE">Marié(e)</option>
-            <option value="DIVORCE">Divorcé(e)</option>
-            <option value="VEUF">Veuf / Veuve</option>
           </select>
         </div>
         <div class="field">
@@ -138,15 +138,12 @@
         <div class="field">
           <label>Type de demande</label>
           <select id="e-typeDemande">
-            <option value="TRANSFORMATION">Transformation</option>
+            <option value="">— Sélectionner —</option>
           </select>
         </div>
         <div class="field">
-          <label>Type de visa</label>
-          <select id="e-typeVisa">
-            <option value="TRAVAIL">Travail</option>
-            <option value="ENTREPRENEUR">Entrepreneur</option>
-          </select>
+          <label>Type de visa (non modifiable)</label>
+          <input type="text" id="e-typeVisa" readonly style="background-color: #f5f5f5; cursor: not-allowed;"/>
         </div>
       </div>
     </div>
@@ -168,6 +165,32 @@ let currentData = {};
 let demandeId = null;
 let piecesList = [];
 
+// Données de référence
+let allSituations = [];
+let allTypeDemandes = [];
+let allTypeVisas = [];
+
+// Labels personnalisés pour l'affichage
+const visaDisplayLabels = {
+  'TRAVAIL': 'Travailleur',
+  'ENTREPRENEUR': 'Investisseur',
+  'COURT SEJOUR': 'Court séjour',
+  'LONG SEJOUR': 'Long séjour',
+  'TRANSFORMABLE': 'Transformable'
+};
+
+const demandeDisplayLabels = {
+  'NOUVEAU_TITRE': 'Nouveau titre',
+  'RENOUVELLEMENT': 'Renouvellement',
+  'DUPLICATA': 'Duplicata',
+  'TRANSFERT_VISA': 'Transfert de visa',
+  'RECUPERATION': 'Récupération',
+  'NOUVEAU_TITRE_TRAVAILLEUR': 'Nouveau titre - Travailleur',
+  'NOUVEAU_TITRE_INVESTISSEUR': 'Nouveau titre - Investisseur',
+  'NOUVEAU_VISA_TRANSFORMABLE': 'Nouveau visa transformable',
+  'Première demande': 'Première demande'
+};
+
 const DTO_FIELDS = [
   'typeDemande',
   'typeVisa',
@@ -176,6 +199,7 @@ const DTO_FIELDS = [
   'firstNames',
   'maidenName',
   'birthDate',
+  'birthPlace',
   'maritalStatus',
   'nationality',
   'homeAddress',
@@ -202,6 +226,39 @@ function getVal(id) {
   return el ? el.value.trim() || null : null;
 }
 
+async function loadReferenceData() {
+  try {
+    allSituations = await apiFetch(API.situationsFamiliales) || [];
+    allTypeDemandes = await apiFetch(API.typeDemandes) || [];
+    allTypeVisas = await apiFetch(API.typeVisas) || [];
+  } catch (e) {
+    console.error('Erreur chargement données de référence:', e);
+  }
+  populateSelects();
+}
+
+function populateSelects() {
+  // Situations familiales
+  const sitSelect = document.getElementById('e-maritalStatus');
+  if (sitSelect) {
+    sitSelect.innerHTML = '<option value="">— Sélectionner —</option>' +
+      (allSituations || []).map(s => `<option value="${s.libelle}">${s.libelle}</option>`).join('');
+  }
+
+  // Types de demande (avec labels personnalisés)
+  const typeDemandeSelect = document.getElementById('e-typeDemande');
+  if (typeDemandeSelect) {
+    typeDemandeSelect.innerHTML = '<option value="">— Sélectionner —</option>' +
+      (allTypeDemandes || []).map(t => {
+        const nom = t.nom || '';
+        const display = demandeDisplayLabels[nom] || nom;
+        return `<option value="${nom}">${display}</option>`;
+      }).join('');
+  }
+
+  // Type de visa en READ-ONLY - ne pas modifier
+}
+
 function normalizeDemande(d) {
   const demandeur = d.demandeur || {};
   const nationalite = demandeur.nationalite || {};
@@ -214,6 +271,7 @@ function normalizeDemande(d) {
     firstNames: d.firstNames || demandeur.prenom || null,
     maidenName: d.maidenName || null,
     birthDate: d.birthDate || demandeur.dateNaissance || null,
+    birthPlace: d.birthPlace || demandeur.lieuNaissance || null,
     maritalStatus: d.maritalStatus || situation.libelle || null,
     nationality: d.nationality || nationalite.nom || null,
     homeAddress: d.homeAddress || null,
@@ -264,6 +322,7 @@ function populateForm(d) {
   setVal('e-firstNames',             d.firstNames);
   setVal('e-maidenName',             d.maidenName);
   setVal('e-birthDate',              d.birthDate);
+  setVal('e-birthPlace',             d.birthPlace);
   setVal('e-maritalStatus',          d.maritalStatus);
   setVal('e-nationality',            d.nationality);
   setVal('e-homeAddress',            d.homeAddress);
@@ -274,7 +333,13 @@ function populateForm(d) {
   setVal('e-dateDelivranceVisaPrcd', d.dateDelivranceVisaPrcd);
   setVal('e-dateExpirationVisaPrcd', d.dateExpirationVisaPrcd);
   setVal('e-typeDemande',            d.typeDemande || 'TRANSFORMATION');
-  setVal('e-typeVisa',               d.typeVisa);
+
+  // Type de visa en READ-ONLY avec label personnalisé
+  const typeVisaInput = document.getElementById('e-typeVisa');
+  if (typeVisaInput && d.typeVisa) {
+    const display = visaDisplayLabels[d.typeVisa] || d.typeVisa;
+    typeVisaInput.value = display;
+  }
 }
 
 function buildPiecesGrid() {
@@ -320,6 +385,8 @@ function updateProgress() {
 }
 
 async function loadDemande() {
+  await loadReferenceData();
+
   demandeId = getIdFromUrl();
   if (!demandeId) {
     document.getElementById('loading-state').innerHTML =
@@ -379,6 +446,7 @@ async function saveDemande() {
     firstNames: getVal('e-firstNames'),
     maidenName: getVal('e-maidenName'),
     birthDate: getVal('e-birthDate'),
+    birthPlace: getVal('e-birthPlace'),
     maritalStatus: getVal('e-maritalStatus'),
     nationality: getVal('e-nationality'),
     homeAddress: getVal('e-homeAddress'),
@@ -389,7 +457,7 @@ async function saveDemande() {
     dateDelivranceVisaPrcd: getVal('e-dateDelivranceVisaPrcd'),
     dateExpirationVisaPrcd: getVal('e-dateExpirationVisaPrcd'),
     typeDemande: getVal('e-typeDemande'),
-    typeVisa: getVal('e-typeVisa'),
+    // typeVisa n'est pas modifiable - ne pas l'envoyer
   });
   await save(payload, 'Modifications enregistrées !');
 }

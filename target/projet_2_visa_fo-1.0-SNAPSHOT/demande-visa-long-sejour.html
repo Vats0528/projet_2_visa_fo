@@ -84,6 +84,10 @@
           <input type="date" id="birthDate"/>
         </div>
         <div class="field">
+          <label>Lieu de naissance</label>
+          <input type="text" id="birthPlace" placeholder="Ville ou région"/>
+        </div>
+        <div class="field">
           <label>Situation familiale *</label>
           <select id="maritalStatus">
             <option value="">— Sélectionner —</option>
@@ -192,6 +196,27 @@ const SPECIAL_BY_TYPE = {
   'ENTREPRENEUR': ['Statut Société', 'Extrait RC', 'Carte Fiscale']
 };
 
+// Labels personnalisés pour l'affichage
+const visaDisplayLabels = {
+  'TRAVAIL': 'Travailleur',
+  'ENTREPRENEUR': 'Investisseur',
+  'COURT SEJOUR': 'Court séjour',
+  'LONG SEJOUR': 'Long séjour',
+  'TRANSFORMABLE': 'Transformable'
+};
+
+const demandeDisplayLabels = {
+  'NOUVEAU_TITRE': 'Nouveau titre',
+  'RENOUVELLEMENT': 'Renouvellement',
+  'DUPLICATA': 'Duplicata',
+  'TRANSFERT_VISA': 'Transfert de visa',
+  'RECUPERATION': 'Récupération',
+  'NOUVEAU_TITRE_TRAVAILLEUR': 'Nouveau titre - Travailleur',
+  'NOUVEAU_TITRE_INVESTISSEUR': 'Nouveau titre - Investisseur',
+  'NOUVEAU_VISA_TRANSFORMABLE': 'Nouveau visa transformable',
+  'Première demande': 'Première demande'
+};
+
 let allTypeVisas = [];
 let allTypeDemandes = [];
 let allNationalites = [];
@@ -203,18 +228,22 @@ let commonPieces = [];
 let specialPieces = {};
 let currentStep = 1;
 
-// Initialisation au chargement
-async function initializeForm() {
+// Chargement des données de référence
+async function loadReferenceData() {
   allTypeVisas = await loadTypeVisas();
   allTypeDemandes = await loadTypeDemandes();
   allNationalites = await loadNationalites();
   allSituations = await loadSituationsFamiliales();
   allCategories = await loadCategoriesPieces();
   buildPieceMaps();
+  populateSelects();
+  initializePieceState();
+}
+
+function populateSelects() {
   renderTypeOptions();
   renderNationalites();
   renderSituations();
-  initializePieceState();
 }
 
 function initializePieceState() {
@@ -294,9 +323,11 @@ function renderTypeOptions() {
     'ENTREPRENEUR': 'Investisseur',
   };
 
-  const filtered = (allTypeVisas || []).filter(type =>
-    ['TRAVAIL', 'ENTREPRENEUR'].includes((type.libelle || '').toUpperCase())
-  );
+  // Filtre pour afficher seulement TRAVAIL et ENTREPRENEUR
+  const filtered = (allTypeVisas || []).filter(type => {
+    const libelle = (type.libelle || '').toUpperCase();
+    return libelle === 'TRAVAIL' || libelle === 'ENTREPRENEUR';
+  });
 
   const options = filtered.length > 0
     ? filtered.map(type => ({ libelle: type.libelle }))
@@ -467,6 +498,7 @@ async function submitDemande() {
     firstNames:   document.getElementById('firstNames').value.trim(),
     maidenName:   document.getElementById('maidenName').value.trim() || null,
     birthDate:    document.getElementById('birthDate').value || null,
+    birthPlace:   document.getElementById('birthPlace').value.trim() || null,
     maritalStatus: document.getElementById('maritalStatus').value || null,
     nationality:  document.getElementById('nationality').value.trim(),
     homeAddress:  document.getElementById('homeAddress').value.trim() || null,
@@ -524,7 +556,7 @@ function getVisiblePieces() {
 }
 
 // Initialize on page load
-initializeForm();
+loadReferenceData();
 </script>
 </body>
 </html>

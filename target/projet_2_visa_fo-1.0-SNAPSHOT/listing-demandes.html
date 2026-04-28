@@ -37,8 +37,6 @@
         <label>Type</label>
         <select id="filter-type" onchange="filterDemandes()">
           <option value="">Tous</option>
-          <option value="TRAVAIL">Travail</option>
-          <option value="ENTREPRENEUR">Entrepreneur</option>
         </select>
       </div>
       <div class="field" style="width:160px">
@@ -63,8 +61,42 @@
 <script src="config.js"></script>
 <script>
 let allDemandes = [];
+let allTypeVisas = [];
+
+// Labels personnalisés pour l'affichage
+const visaDisplayLabels = {
+  'TRAVAIL': 'Travailleur',
+  'ENTREPRENEUR': 'Investisseur',
+  'COURT SEJOUR': 'Court séjour',
+  'LONG SEJOUR': 'Long séjour',
+  'TRANSFORMABLE': 'Transformable'
+};
+
+async function loadReferenceData() {
+  try {
+    allTypeVisas = await apiFetch(API.typeVisas) || [];
+  } catch (e) {
+    console.error('Erreur chargement données de référence:', e);
+  }
+  populateSelects();
+}
+
+function populateSelects() {
+  const typeSelect = document.getElementById('filter-type');
+  if (typeSelect) {
+    const currentValue = typeSelect.value;
+    typeSelect.innerHTML = '<option value="">Tous</option>' +
+      (allTypeVisas || []).map(v => {
+        const libelle = v.libelle || '';
+        const display = visaDisplayLabels[libelle] || libelle;
+        return `<option value="${libelle}">${display}</option>`;
+      }).join('');
+    typeSelect.value = currentValue;
+  }
+}
 
 async function loadDemandes() {
+  await loadReferenceData();
   try {
     const raw = await apiFetch(API.demandes);
     allDemandes = normalizeDemandesForUi(raw);
