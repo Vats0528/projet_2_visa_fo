@@ -24,7 +24,13 @@ export const DemandeurDetailPage = () => {
   const [showPieceModal, setShowPieceModal] = useState(false)
   const [passeportForm, setPasseportForm] = useState({})
   const [visaForm, setVisaForm] = useState({})
-  const [visaTransformableForm, setVisaTransformableForm] = useState({})
+  const [visaTransformableForm, setVisaTransformableForm] = useState({
+    numeroVisa: '',
+    reference: '',
+    dateDelivrance: '',
+    dateExpiration: '',
+    passeportId: ''
+  })
   const [pieceForm, setPieceForm] = useState({})
 
   useEffect(() => {
@@ -133,16 +139,42 @@ export const DemandeurDetailPage = () => {
     return <div className="text-center py-8">Demandeur introuvable</div>
   }
 
-  const pieceColumns = [
-    { key: 'fichierPath', label: 'Fichier' },
-    { key: 'categoriePiece', label: 'Catégorie' },
-    { key: 'dateUpload', label: 'Date upload' },
-    {
-      key: 'valide',
-      label: 'Statut',
-      render: (row) => <Badge variant={row.valide ? 'success' : 'danger'}>{row.valide ? 'Validée' : 'En attente'}</Badge>
+const pieceColumns = [
+  {
+    key: 'fichierPath',
+    label: 'Fichier',
+    render: (row) => {
+      const fileUrl = `/document_demandeur/${row.fichierPath}`;
+
+      return (
+        <div className="d-flex align-items-center gap-3">
+          {/* le chemin du fichier */}
+          <span>{row.fichierPath}</span>
+
+          {/* bouton voir */}
+          <a href={fileUrl} target="_blank" rel="noopener noreferrer">
+            <button className="btn btn-primary btn-sm">
+              👁 Voir
+            </button>
+          </a>
+        </div>
+      );
     }
-  ]
+  },
+
+  { key: 'categoriePiece', label: 'Catégorie' },
+  { key: 'dateUpload', label: 'Date upload' },
+
+  {
+    key: 'valide',
+    label: 'Statut',
+    render: (row) => (
+      <Badge variant={row.valide ? 'success' : 'danger'}>
+        {row.valide ? 'Validée' : 'En attente'}
+      </Badge>
+    )
+  }
+];
 
   const passeportColumns = [
     { key: 'numeroPasseport', label: 'Numéro' },
@@ -321,6 +353,29 @@ export const DemandeurDetailPage = () => {
             onChange={(event) => setVisaTransformableForm({ ...visaTransformableForm, numeroVisa: event.target.value })}
             required
           />
+          <Input
+              label="Référence"
+              value={visaTransformableForm.reference || ''}
+              onChange={(event) =>
+                setVisaTransformableForm({ ...visaTransformableForm, reference: event.target.value })
+              }
+            />
+            <Input
+              label="Date de délivrance"
+              type="date"
+              value={visaTransformableForm.dateDelivrance || ''}
+              onChange={(event) =>
+                setVisaTransformableForm({ ...visaTransformableForm, dateDelivrance: event.target.value })
+              }
+            />
+            <Input
+              label="Date d'expiration"
+              type="date"
+              value={visaTransformableForm.dateExpiration || ''}
+              onChange={(event) =>
+                setVisaTransformableForm({ ...visaTransformableForm, dateExpiration: event.target.value })
+              }
+            />
           <Select
             label="Passeport source"
             options={documents.passeports || []}
@@ -332,6 +387,7 @@ export const DemandeurDetailPage = () => {
             <Button type="submit" variant="primary">Sauvegarder</Button>
             <Button type="button" variant="secondary" onClick={() => setShowVisaTransformableModal(false)}>Annuler</Button>
           </div>
+
         </form>
       </Modal>
 

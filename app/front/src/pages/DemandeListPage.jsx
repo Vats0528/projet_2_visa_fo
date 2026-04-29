@@ -156,6 +156,7 @@ export const DemandeListPage = () => {
                 ...formData,
                 typeDemandeId,
                 typeVisaId: nextTypeDemande?.code === 'NOUVEAU_TITRE' ? formData.typeVisaId : undefined
+                
               })
             }}
             required
