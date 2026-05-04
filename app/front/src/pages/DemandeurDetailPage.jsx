@@ -205,8 +205,8 @@ const pieceColumns = [
   return (
     <div>
       <Notification notification={notification} />
-      <button onClick={() => navigate('/demandeurs')} className="mb-4 text-blue-600 hover:underline">
-        ← Retour à la liste
+      <button onClick={() => navigate('/demandeurs')} className="mb-6 text-secondary hover:text-primary transition-colors font-semibold tracking-wide uppercase text-sm">
+        ← Retour au Registre
       </button>
 
       <Card title={`Demandeur #${demandeur.id}`}>

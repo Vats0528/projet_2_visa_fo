@@ -24,7 +24,7 @@ export const Button = ({ children, variant = 'primary', size = 'md', ...props })
 export const Card = ({ children, title }) => {
   return (
     <div className="card">
-      {title && <h3 className="text-lg font-semibold mb-4 text-gray-800">{title}</h3>}
+      {title && <h3 className="text-xl font-serif text-primary mb-6 border-b border-gray-100 pb-3 font-semibold tracking-wide">{title}</h3>}
       {children}
     </div>
   )
@@ -93,16 +93,16 @@ export const Table = ({ columns, data, onView, onEdit, onDelete, loading }) => {
   }
 
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full border-collapse">
+    <div className="overflow-x-auto shadow-sm rounded-lg border border-gray-200">
+      <table className="w-full border-collapse bg-white">
         <thead>
-          <tr className="bg-gray-50 border-b">
+          <tr className="bg-slate-50 border-b-2 border-slate-200">
             {columns.map(col => (
-              <th key={col.key} className="text-left px-4 py-3 font-semibold text-gray-700">
+              <th key={col.key} className="text-left px-6 py-4 font-bold text-primary uppercase text-xs tracking-wider">
                 {col.label}
               </th>
             ))}
-            {(onView || onEdit || onDelete) && <th className="text-left px-4 py-3 font-semibold text-gray-700">Actions</th>}
+            {(onView || onEdit || onDelete) && <th className="text-left px-6 py-4 font-bold text-primary uppercase text-xs tracking-wider">Actions</th>}
           </tr>
         </thead>
         <tbody>

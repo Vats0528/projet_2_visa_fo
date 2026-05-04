@@ -7,8 +7,15 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: '#3b82f6',
-        secondary: '#10b981'
+        primary: '#0A1F44',
+        secondary: '#D4AF37',
+        accent: '#F3E5AB',
+        surface: '#FFFFFF',
+        background: '#F8F9FA'
+      },
+      fontFamily: {
+        sans: ['"Inter"', 'sans-serif'],
+        serif: ['"Cinzel"', 'serif'],
       }
     }
   },

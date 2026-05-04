@@ -106,7 +106,7 @@ const pieceColumns = [
   return (
     <div>
       <Notification notification={notification} />
-      <button onClick={() => navigate('/demandes')} className="mb-4 text-blue-600 hover:underline">← Retour</button>
+      <button onClick={() => navigate('/demandes')} className="mb-6 text-secondary hover:text-primary transition-colors font-semibold tracking-wide uppercase text-sm">← Retour aux Demandes</button>
 
       {/* Affichage du QR Code dans un petit encadré */}
       <div className="bg-white p-2 border rounded-lg shadow-sm flex flex-col items-center">

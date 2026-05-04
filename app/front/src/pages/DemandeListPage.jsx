@@ -120,8 +120,8 @@ export const DemandeListPage = () => {
   return (
     <div>
       <Notification notification={notification} />
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">Demandes</h1>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-4xl font-serif text-primary drop-shadow-sm">Gestion des Demandes</h1>
         <Button onClick={handleAdd} variant="primary">+ Nouvelle Demande</Button>
       </div>
 

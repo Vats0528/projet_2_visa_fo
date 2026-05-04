@@ -97,8 +97,8 @@ export const DemandeurListPage = () => {
   return (
     <div>
       <Notification notification={notification} />
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">Demandeurs</h1>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-4xl font-serif text-primary drop-shadow-sm">Registre des Demandeurs</h1>
         <Button onClick={handleAdd} variant="primary">+ Ajouter Demandeur</Button>
       </div>
 
