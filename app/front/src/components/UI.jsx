@@ -1,6 +1,6 @@
-import React from 'react'
 
-export const Button = ({ children, variant = 'primary', size = 'md', ...props }) => {
+
+export const Button = ({ children, variant = 'primary', size = 'md', className = '', ...props }) => {
   const variants = {
     primary: 'btn-primary',
     secondary: 'btn-secondary',
@@ -15,7 +15,7 @@ export const Button = ({ children, variant = 'primary', size = 'md', ...props })
   }
   
   return (
-    <button className={`${variants[variant]} ${sizes[size]}`} {...props}>
+    <button className={`${variants[variant]} ${sizes[size]} ${className}`} {...props}>
       {children}
     </button>
   )

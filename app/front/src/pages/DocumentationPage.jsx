@@ -1,4 +1,3 @@
-import React from 'react'
 import { Card } from '../components/UI'
 
 export const DocumentationPage = () => {
@@ -18,11 +17,11 @@ export const DocumentationPage = () => {
           <ul className="space-y-3 text-sm text-gray-700 leading-relaxed font-light">
             <li className="flex items-start">
               <span className="text-secondary mr-2">♦</span>
-              <span><strong>Décret 2024-001 :</strong> Relatif aux conditions d'octroi de visas touristiques.</span>
+              <span><strong>Décret 2024-001 :</strong> Relatif aux conditions d&apos;octroi de visas touristiques.</span>
             </li>
             <li className="flex items-start">
               <span className="text-secondary mr-2">♦</span>
-              <span><strong>Loi 2023-018 :</strong> Sur le statut des résidents de long terme et les critères d'éligibilité.</span>
+              <span><strong>Loi 2023-018 :</strong> Sur le statut des résidents de long terme et les critères d&apos;éligibilité.</span>
             </li>
             <li className="flex items-start">
               <span className="text-secondary mr-2">♦</span>
@@ -35,7 +34,7 @@ export const DocumentationPage = () => {
           <ul className="space-y-3 text-sm text-gray-700 leading-relaxed font-light">
             <li className="flex items-start">
               <span className="text-secondary mr-2">♦</span>
-              <span><strong>Création d'un dossier :</strong> Le demandeur doit d'abord être enregistré dans le Registre Citoyen.</span>
+              <span><strong>Création d&apos;un dossier :</strong> Le demandeur doit d&apos;abord être enregistré dans le Registre Citoyen.</span>
             </li>
             <li className="flex items-start">
               <span className="text-secondary mr-2">♦</span>
@@ -43,19 +42,19 @@ export const DocumentationPage = () => {
             </li>
             <li className="flex items-start">
               <span className="text-secondary mr-2">♦</span>
-              <span><strong>Approbation finale :</strong> Après validation de toutes les pièces, la demande passe en "En cours d'analyse" puis "Approuvée".</span>
+              <span><strong>Approbation finale :</strong> Après validation de toutes les pièces, la demande passe en &quot;En cours d&apos;analyse&quot; puis &quot;Approuvée&quot;.</span>
             </li>
           </ul>
         </Card>
       </div>
 
       <div className="bg-slate-50 border border-slate-200 rounded-xl p-8 text-center mt-12">
-        <h3 className="text-xl font-serif text-primary mb-4">Besoin d'assistance ?</h3>
+        <h3 className="text-xl font-serif text-primary mb-4">Besoin d&apos;assistance ?</h3>
         <p className="text-gray-600 font-light mb-6">
           Contactez le service informatique ou le responsable du registre consulaire pour toute question technique.
         </p>
         <button className="px-6 py-2 border-2 border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300 font-semibold tracking-wide uppercase text-sm">
-          Faire une demande d'assistance
+          Faire une demande d&apos;assistance
         </button>
       </div>
     </div>

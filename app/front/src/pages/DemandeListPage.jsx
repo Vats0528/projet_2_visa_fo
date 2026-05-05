@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
-import { demandeAPI, referenceAPI, pieceAPI, demandeurAPI } from '../services/api'
-import { Button, Card, Badge, Input, Select, Modal, Table } from '../components/UI'
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { demandeAPI, referenceAPI, demandeurAPI } from '../services/api'
+import { Button, Card, Badge, Select, Modal, Table } from '../components/UI'
 import { useNotification, Notification } from '../hooks/useNotification'
 
 export const DemandeListPage = () => {
@@ -12,7 +12,6 @@ export const DemandeListPage = () => {
   const [selectedDemande, setSelectedDemande] = useState(null)
   const [formData, setFormData] = useState({})
   const [references, setReferences] = useState({})
-  const [selectedDemandeur, setSelectedDemandeur] = useState(null)
   const { notification, notify } = useNotification()
   const navigate = useNavigate()
 
@@ -120,9 +119,9 @@ export const DemandeListPage = () => {
   return (
     <div>
       <Notification notification={notification} />
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-4xl font-serif text-primary drop-shadow-sm">Gestion des Demandes</h1>
-        <Button onClick={handleAdd} variant="primary">+ Nouvelle Demande</Button>
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+        <h1 className="text-3xl md:text-4xl font-serif text-primary drop-shadow-sm">Gestion des Demandes</h1>
+        <Button onClick={handleAdd} variant="primary" className="w-full md:w-auto">+ Nouvelle Demande</Button>
       </div>
 
       <Card>

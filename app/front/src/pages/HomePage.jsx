@@ -1,15 +1,14 @@
-import React from 'react'
 import { Link } from 'react-router-dom'
 import { Card } from '../components/UI'
 
 export const HomePage = () => {
   return (
     <div className="space-y-12">
-      <div className="text-center py-10 border-b border-gray-200">
-        <h1 className="text-5xl font-serif text-primary tracking-tight mb-4 drop-shadow-sm">
+      <div className="text-center py-10 border-b border-gray-200 px-4">
+        <h1 className="text-4xl md:text-5xl font-serif text-primary tracking-tight mb-4 drop-shadow-sm">
           Portail Administratif
         </h1>
-        <p className="text-gray-600 text-xl font-light max-w-2xl mx-auto leading-relaxed">
+        <p className="text-gray-600 text-lg md:text-xl font-light max-w-2xl mx-auto leading-relaxed">
           Système sécurisé de gestion des demandes administratives <br/>(visas, résidences, passeports)
         </p>
       </div>
@@ -30,7 +29,7 @@ export const HomePage = () => {
         </Card>
 
         <Card title="📋 Documentation Officielle">
-          <p className="text-gray-600 mb-6 font-light leading-relaxed">Textes de référence, procédures et manuels d'utilisation du système.</p>
+          <p className="text-gray-600 mb-6 font-light leading-relaxed">Textes de référence, procédures et manuels d&apos;utilisation du système.</p>
           <Link to="/documentation" className="inline-block border-b-2 border-secondary text-primary font-medium hover:text-secondary hover:border-primary transition-all pb-1 uppercase text-sm tracking-wider">
             Accéder à la base →
           </Link>

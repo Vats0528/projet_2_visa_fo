@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { demandeAPI, pieceAPI, referenceAPI } from '../services/api'
 import { Button, Card, Badge, Input, Select, Modal, Table } from '../components/UI'
@@ -17,7 +17,6 @@ export const DemandeDetailPage = () => {
   const [pieceForm, setPieceForm] = useState({})
   const [references, setReferences] = useState({})
   const { notification, notify } = useNotification()
-  const [categorieP, setCategorieP ] = useState({})
 
           console.log(pieces);
 
@@ -120,7 +119,7 @@ const shareUrl = `http://${currentIP}:5173/demandes/${id}`;
       </div>
 
       <Card title={`Demande #${demande.id}`}>
-        <div className="grid grid-cols-2 gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           <div>
             <p className="text-gray-600">Demandeur</p>
             <p className="text-lg font-semibold">{demande.demandeurNom || demande.demandeurId}</p>

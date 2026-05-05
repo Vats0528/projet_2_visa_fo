@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { demandeurAPI, referenceAPI } from '../services/api'
 import { Button, Card, Input, Select, Modal, Table } from '../components/UI'
@@ -97,9 +97,9 @@ export const DemandeurListPage = () => {
   return (
     <div>
       <Notification notification={notification} />
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-4xl font-serif text-primary drop-shadow-sm">Registre des Demandeurs</h1>
-        <Button onClick={handleAdd} variant="primary">+ Ajouter Demandeur</Button>
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+        <h1 className="text-3xl md:text-4xl font-serif text-primary drop-shadow-sm">Registre des Demandeurs</h1>
+        <Button onClick={handleAdd} variant="primary" className="w-full md:w-auto">+ Ajouter Demandeur</Button>
       </div>
 
       <Card>

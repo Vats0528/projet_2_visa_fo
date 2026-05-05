@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button, Card, Badge, Input, Select, Modal, Table } from '../components/UI'
 import { demandeurAPI, objetMetierAPI, pieceAPI, referenceAPI } from '../services/api'
@@ -210,7 +210,7 @@ const pieceColumns = [
       </button>
 
       <Card title={`Demandeur #${demandeur.id}`}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <p className="text-gray-500 text-sm">Nom complet</p>
             <p className="text-lg font-semibold">{demandeur.nom} {demandeur.prenom}</p>
@@ -234,7 +234,7 @@ const pieceColumns = [
         </div>
       </Card>
 
-      <div className="grid grid-cols-1 xl:grid-cols-4 gap-6 mt-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-6 mt-6">
         <Card title="Passeports">
           <Button onClick={() => setShowPasseportModal(true)} variant="success" size="sm" className="mb-4">
             + Ajouter passeport
