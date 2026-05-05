@@ -4,7 +4,7 @@ import { demandeAPI, pieceAPI, referenceAPI } from '../services/api'
 import { Button, Card, Badge, Input, Select, Modal, Table } from '../components/UI'
 import { useNotification, Notification } from '../hooks/useNotification'
 import { QRCodeSVG } from 'qrcode.react';
-const shareUrl = window.location.href.replace('localhost', '10.142.60.162');
+// const shareUrl = window.location.href.replace('localhost', '10.142.60.162');
 
 export const DemandeDetailPage = () => {
   const { id } = useParams()
@@ -102,6 +102,11 @@ const pieceColumns = [
     render: (row) => <Badge variant={row.valide ? 'success' : 'danger'}>{row.valide ? 'Validée' : 'Non validée'}</Badge>
   }
 ]
+
+// const shareUrl = window.location.href.replace('localhost', '10.142.60.162');
+const currentIP = window.location.hostname;
+const shareUrl = `http://${currentIP}:5173/demandes/${id}`;
+
 
   return (
     <div>
