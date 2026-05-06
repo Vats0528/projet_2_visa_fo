@@ -109,11 +109,25 @@ export const DemandeListPage = () => {
     { key: 'nomDemandeur', label: 'Demandeur' },
     { key: 'typeDemande', label: 'Type de demande' },
     { 
-      key: 'statusLibelle', 
+      key: 'status', // <--- Corrigé : correspond à ton JSON "status": "DOCUMENTS_VALIDES"
       label: 'Statut',
-      render: (row) => <Badge variant={getStatusColor(row.statusId)}>{row.statusLibelle}</Badge>
+      render: (row) => (
+        <Badge variant={getStatusColor(row.status)}>
+          {row.status?.replace(/_/g, ' ')} {/* Optionnel: remplace les _ par des espaces */}
+        </Badge>
+      )
     },
-    { key: 'dateCreation', label: 'Date Création' }
+    { 
+      key: 'createdAt', // <--- Corrigé : correspond à ton JSON "createdAt"
+      label: 'Date de création',
+      render: (row) => new Date(row.createdAt).toLocaleDateString('fr-FR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      })
+    }
   ]
 
   return (

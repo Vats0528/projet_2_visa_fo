@@ -132,19 +132,19 @@ export const DemandeListPage2 = () => {
     return colors[status] || 'warning'
   }
 
-const columns = [
-  { key: 'id', label: 'ID' },
-  { key: 'demandeurId', label: 'ID Demandeur' },
-  { key: 'nomDemandeur', label: 'Nom Demandeur' },
-  { 
-    key: 'numeroPasseport', 
-    label: 'Passeport',
-    render: (row) => {
-      const pass = allPasseports.find(p => p.demandeurId === row.demandeurId)
-      return pass ? pass.numeroPasseport : <span className="text-gray-400">N/A</span>
-    }
-  },
-  { key: 'typeDemande', label: 'Type' },
+  const columns = [
+    { key: 'id', label: 'ID' },
+    { key: 'demandeurId', label: 'ID Demandeur' },
+    { key: 'nomDemandeur', label: 'Nom Demandeur' },
+    { 
+      key: 'numeroPasseport', 
+      label: 'Passeport',
+      render: (row) => {
+        const pass = allPasseports.find(p => p.demandeurId === row.demandeurId)
+        return pass ? pass.numeroPasseport : <span className="text-gray-400">N/A</span>
+      }
+    },
+    { key: 'typeDemande', label: 'Type' },
   { 
     key: 'status', // <--- Corrigé : correspond à ton JSON "status": "DOCUMENTS_VALIDES"
     label: 'Statut',
@@ -165,7 +165,7 @@ const columns = [
       minute: '2-digit'
     })
   }
-]
+  ]
 
   const selectedType = references.types?.find(t => t.id === formData.typeDemandeId)
   const needsVisa = selectedType?.code === 'NOUVEAU_TITRE'
