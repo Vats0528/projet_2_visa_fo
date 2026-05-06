@@ -132,26 +132,40 @@ export const DemandeListPage2 = () => {
     return colors[status] || 'warning'
   }
 
-  const columns = [
-    { key: 'id', label: 'ID' },
-    { key: 'demandeurId', label: 'ID Demandeur' },
-    { key: 'nomDemandeur', label: 'Nom Demandeur' },
-    { 
-      key: 'numeroPasseport', 
-      label: 'Passeport',
-      render: (row) => {
-        const pass = allPasseports.find(p => p.demandeurId === row.demandeurId)
-        return pass ? pass.numeroPasseport : <span className="text-gray-400">N/A</span>
-      }
-    },
-    { key: 'typeDemande', label: 'Type' },
-    { 
-      key: 'statusLibelle', 
-      label: 'Statut',
-      render: (row) => <Badge variant={getStatusColor(row.statusId)}>{row.statusLibelle}</Badge>
-    },
-    { key: 'dateCreation', label: 'Date' }
-  ]
+const columns = [
+  { key: 'id', label: 'ID' },
+  { key: 'demandeurId', label: 'ID Demandeur' },
+  { key: 'nomDemandeur', label: 'Nom Demandeur' },
+  { 
+    key: 'numeroPasseport', 
+    label: 'Passeport',
+    render: (row) => {
+      const pass = allPasseports.find(p => p.demandeurId === row.demandeurId)
+      return pass ? pass.numeroPasseport : <span className="text-gray-400">N/A</span>
+    }
+  },
+  { key: 'typeDemande', label: 'Type' },
+  { 
+    key: 'status', // <--- Corrigé : correspond à ton JSON "status": "DOCUMENTS_VALIDES"
+    label: 'Statut',
+    render: (row) => (
+      <Badge variant={getStatusColor(row.status)}>
+        {row.status?.replace(/_/g, ' ')} {/* Optionnel: remplace les _ par des espaces */}
+      </Badge>
+    )
+  },
+  { 
+    key: 'createdAt', // <--- Corrigé : correspond à ton JSON "createdAt"
+    label: 'Date de création',
+    render: (row) => new Date(row.createdAt).toLocaleDateString('fr-FR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    })
+  }
+]
 
   const selectedType = references.types?.find(t => t.id === formData.typeDemandeId)
   const needsVisa = selectedType?.code === 'NOUVEAU_TITRE'

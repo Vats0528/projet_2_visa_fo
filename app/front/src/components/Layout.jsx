@@ -14,6 +14,7 @@ export const Layout = ({ children }) => {
               <li><Link to="/" className="hover:text-secondary transition-colors duration-200">Accueil</Link></li>
               <li><Link to="/demandeurs" className="hover:text-secondary transition-colors duration-200">Demandeurs</Link></li>
               <li><Link to="/demandes" className="hover:text-secondary transition-colors duration-200">Demandes</Link></li>
+              <li><Link to="/demandes-demandeur" className="hover:text-secondary transition-colors duration-200">Demandes_passeport</Link></li>
             </ul>
           </div>
         </div>
