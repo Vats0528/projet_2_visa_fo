@@ -8,7 +8,7 @@ export const Layout = ({ children }) => {
         <div className="max-w-7xl mx-auto px-6 py-5">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <Link to="/" className="text-3xl font-serif tracking-widest text-secondary drop-shadow">
-              <span className="text-white font-bold">VISA</span> 002647 - 
+              <span className="text-white font-bold">VISA</span> 002647
             </Link>
             <ul className="flex flex-wrap justify-center gap-4 md:gap-8 text-sm font-semibold uppercase tracking-wider">
               <li><Link to="/" className="hover:text-secondary transition-colors duration-200">Accueil</Link></li>

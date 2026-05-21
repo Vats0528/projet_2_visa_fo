@@ -110,7 +110,13 @@ export const DemandeurDetailPage = () => {
   const submitPiece = async (event) => {
     event.preventDefault()
     try {
-      await pieceAPI.create({ ...pieceForm, demandeurId: Number(id) })
+      const formData = new FormData()
+      formData.append('file', pieceForm.file)
+      formData.append('demandeurId', Number(id))
+      formData.append('categoriePieceId', pieceForm.categoriePieceId)
+      formData.append('valide', pieceForm.valide ? 'true' : 'false')
+
+      await pieceAPI.upload(formData)
       setPieceForm({})
       setShowPieceModal(false)
       notify('Pièce ajoutée', 'success')
@@ -131,6 +137,10 @@ export const DemandeurDetailPage = () => {
     }
   }
 
+  const viewPiece = (piece) => {
+    window.open(pieceAPI.getFileUrl(piece.id), '_blank', 'noopener,noreferrer')
+  }
+
   if (loading) {
     return <div className="text-center py-8">Chargement...</div>
   }
@@ -143,23 +153,7 @@ const pieceColumns = [
   {
     key: 'fichierPath',
     label: 'Fichier',
-    render: (row) => {
-      const fileUrl = `/document_demandeur/${row.fichierPath}`;
-
-      return (
-        <div className="d-flex align-items-center gap-3">
-          {/* le chemin du fichier */}
-          <span>{row.fichierPath}</span>
-
-          {/* bouton voir */}
-          <a href={fileUrl} target="_blank" rel="noopener noreferrer">
-            <button className="btn btn-primary btn-sm">
-              👁 Voir
-            </button>
-          </a>
-        </div>
-      );
-    }
+    render: (row) => row.fichierPath?.split('/').pop() || row.fichierPath
   },
 
   { key: 'categoriePiece', label: 'Catégorie' },
@@ -260,7 +254,7 @@ const pieceColumns = [
           <Button onClick={() => setShowPieceModal(true)} variant="success" size="sm" className="mb-4">
             + Ajouter pièce
           </Button>
-          <Table columns={pieceColumns} data={documents.pieces} onDelete={deletePiece} />
+          <Table columns={pieceColumns} data={documents.pieces} onView={viewPiece} onDelete={deletePiece} />
         </Card>
       </div>
 
@@ -394,9 +388,9 @@ const pieceColumns = [
       <Modal isOpen={showPieceModal} onClose={() => setShowPieceModal(false)} title="Ajouter une pièce">
         <form onSubmit={submitPiece} className="space-y-4">
           <Input
-            label="Chemin du fichier"
-            value={pieceForm.fichierPath || ''}
-            onChange={(event) => setPieceForm({ ...pieceForm, fichierPath: event.target.value })}
+            label="Fichier justificatif"
+            type="file"
+            onChange={(event) => setPieceForm({ ...pieceForm, file: event.target.files?.[0] || null })}
             required
           />
           <Select

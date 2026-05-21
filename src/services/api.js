@@ -5,8 +5,8 @@ import axios from 'axios'
 // const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://10.142.60.162:8080/api/v1'
 
 const currentIP = window.location.hostname;
-const shareUrl = `http://${currentIP}:5173/`;
-const API_BASE_URL =  `http://${currentIP}:8080/api/v1`;
+const BACKEND_BASE_URL = `http://${currentIP}:8080`;
+const API_BASE_URL = `${BACKEND_BASE_URL}/api/v1`;
 
 const client = axios.create({
   baseURL: API_BASE_URL,
@@ -31,7 +31,9 @@ export const demandeAPI = {
   create: (data) => client.post('/demandes', data),
   update: (id, data) => client.put(`/demandes/${id}`, data),
   delete: (id) => client.delete(`/demandes/${id}`),
-  validate: (id) => client.get(`/demandes/${id}/validation`)
+  validate: (id) => client.get(`/demandes/${id}/validation`),
+  getResumePdfUrl: (id) => `${BACKEND_BASE_URL}/api/v1/demandes/${id}/resume-pdf`,
+  getAccusePdfUrl: (id) => `${BACKEND_BASE_URL}/api/v1/demandes/${id}/accuse-reception`
 }
 
 // Pieces
@@ -40,7 +42,11 @@ export const pieceAPI = {
   getById: (id) => client.get(`/pieces/${id}`),
   create: (data) => client.post('/pieces', data),
   update: (id, data) => client.put(`/pieces/${id}`, data),
-  delete: (id) => client.delete(`/pieces/${id}`)
+  delete: (id) => client.delete(`/pieces/${id}`),
+  upload: (data) => client.post('/pieces/upload', data, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  }),
+  getFileUrl: (id) => `${BACKEND_BASE_URL}/api/v1/pieces/${id}/file`
 }
 
 // Objets métier

@@ -51,10 +51,13 @@ export const DemandeDetailPage = () => {
   const handleAddPiece = async (e) => {
     e.preventDefault()
     try {
-      await pieceAPI.create({
-        ...pieceForm,
-        demandeurId: demande.demandeurId
-      })
+      const formData = new FormData()
+      formData.append('file', pieceForm.file)
+      formData.append('demandeurId', demande.demandeurId)
+      formData.append('categoriePieceId', pieceForm.categoriePieceId)
+      formData.append('valide', pieceForm.valide ? 'true' : 'false')
+
+      await pieceAPI.upload(formData)
       fetchData()
       setPieceForm({})
       setShowPieceModal(false)
@@ -73,6 +76,18 @@ export const DemandeDetailPage = () => {
     } catch (error) {
       notify('Erreur lors de la suppression', 'error')
     }
+  }
+
+  const handleViewPiece = (piece) => {
+    window.open(pieceAPI.getFileUrl(piece.id), '_blank', 'noopener,noreferrer')
+  }
+
+  const handleViewResumePdf = () => {
+    window.open(demandeAPI.getResumePdfUrl(id), '_blank', 'noopener,noreferrer')
+  }
+
+  const handleViewAccusePdf = () => {
+    window.open(demandeAPI.getAccusePdfUrl(id), '_blank', 'noopener,noreferrer')
   }
 
   if (loading || !demande) {
@@ -133,8 +148,11 @@ export const DemandeDetailPage = () => {
   }
 
 const pieceColumns = [
-  { key: 'fichierPath', label: 'Fichier' },
-  // Remplace 'categoriePieceLibelle' par 'categoriePiece'
+  {
+    key: 'fichierPath',
+    label: 'Fichier',
+    render: (row) => row.fichierPath?.split('/').pop() || row.fichierPath
+  },
   { key: 'categoriePiece', label: 'Catégorie' }, 
   { key: 'dateUpload', label: 'Date Upload' },
   { 
@@ -153,6 +171,15 @@ const shareUrl = `http://${currentIP}:5173/demandes/${id}`;
     <div>
       <Notification notification={notification} />
       <button onClick={() => navigate('/demandes')} className="mb-6 text-secondary hover:text-primary transition-colors font-semibold tracking-wide uppercase text-sm">← Retour aux Demandes</button>
+
+      <div className="mb-4 flex gap-2">
+        <Button type="button" variant="secondary" size="sm" onClick={handleViewResumePdf}>
+          Voir PDF résumé
+        </Button>
+        <Button type="button" variant="secondary" size="sm" onClick={handleViewAccusePdf}>
+          Voir accusé de réception
+        </Button>
+      </div>
 
       {/* Affichage du QR Code dans un petit encadré */}
       <div className="bg-white p-2 border rounded-lg shadow-sm flex flex-col items-center">
@@ -272,6 +299,7 @@ const shareUrl = `http://${currentIP}:5173/demandes/${id}`;
         <Table 
           columns={pieceColumns}
           data={pieces}
+          onView={handleViewPiece}
           onDelete={handleDeletePiece}
           loading={false}
         />
@@ -308,9 +336,9 @@ const shareUrl = `http://${currentIP}:5173/demandes/${id}`;
       <Modal isOpen={showPieceModal} onClose={() => setShowPieceModal(false)} title="Ajouter Pièce">
         <form onSubmit={handleAddPiece} className="space-y-4">
           <Input
-            label="Chemin du Fichier"
-            value={pieceForm.fichierPath || ''}
-            onChange={(e) => setPieceForm({ ...pieceForm, fichierPath: e.target.value })}
+            label="Fichier justificatif"
+            type="file"
+            onChange={(e) => setPieceForm({ ...pieceForm, file: e.target.files?.[0] || null })}
             required
           />
           <Select
